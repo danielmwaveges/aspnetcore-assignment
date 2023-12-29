@@ -1,0 +1,35 @@
+@model ServicePointView
+
+@{
+    ViewData["Title"] = "Service Point Authentication";
+}
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>Party!</title>
+        </head>
+    <body>
+        <div>
+            <div>
+                @ViewData["message"]<br/> #todo add red color for message
+                Please authenticate service point to head to the service points page.<br />
+                What services would you like. #dropdown from service points table.<br />
+                <form method="post" asp-action="CheckinPage" >
+                    <label for="service">Select Service Point.</label>
+                        <select name="service_id" id="service">
+                            @foreach (var item in Model.ServicePoints)
+                            {
+                                <option value=@item.ServicePointID>@item.ServiceDescription</option>
+                            }
+                        </select>
+                        <input type="password" name="password" required/>
+                        <input type="submit" value="Submit" formaction="@Url.Action("ServicePointAuthentication")"/>
+                </form>
+                (To do: sell it better. Add pictures or something.)
+            </div>
+            #submit button todo
+        </div>
+    </body> 
+</html>

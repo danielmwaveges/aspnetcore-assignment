@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Ticket Printing";
+}
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>Party!</title>
+        </head>
+    <body>
+        <div>
+            <div>
+                Thank you for using qms services.<br />
+                Your ticket details are shown below.<br/>
+                Ticket No: @ViewData["TicketNo"].<br/>
+                Service Point: @ViewData["ServiceId"].<br/>
+                Time Queued: @ViewData["TimeQueued"].<br/>
+                @await ViewBag.WebReport.Render()
+                #print ticket button<br />
+                #counter queus display<br />
+                
+                (To do: sell it better. Add pictures or something.)
+            </div>
+            <li>
+                @Html.ActionLink("Back to Check-in", "CheckinPage", "Queue", null)
+            </li>
+            <li>
+                @Html.ActionLink("Head to Waiting Page", "WaitingPage", "Queue", null)
+            </li>
+            #submit button todo
+        </div>
+    </body> 
+</html>

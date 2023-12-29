@@ -1,0 +1,33 @@
+@model ServicePointView
+
+@{
+    ViewData["Title"] = "Check-In";
+}
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>Party!</title>
+        </head>
+    <body>
+        <div>
+            <div>
+                Welcome to X bank QMS kiosk.<br />
+                What services would you like. #dropdown from service points table.<br />
+                <form method="post" asp-action="CheckinPage" >
+                    <label for="service">What services would you like.</label>
+                        <select name="service_id" id="service">
+                            @foreach (var item in Model.ServicePoints)
+                            {
+                                <option value=@item.ServicePointID>@item.ServiceDescription</option>
+                            }
+                        </select>
+                        <input type="submit" value="Submit">
+                </form>
+                (To do: sell it better. Add pictures or something.)
+            </div>
+            #submit button todo
+        </div>
+    </body> 
+</html>

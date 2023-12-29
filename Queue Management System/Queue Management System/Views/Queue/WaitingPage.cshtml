@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Waiting Page";
+}
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>Party!</title>
+        </head>
+    <body>
+        <div>
+            <div>
+                Welcome to X bank QMS waiting page.<br />
+                #list of called customers<br />
+                <ul>
+                    @foreach (var customer in (dynamic)ViewData["queue"])
+                    {
+                        <li>@customer</li>
+                    }
+                </ul>
+                
+                #counter queus display<br />
+                (To do: sell it better. Add pictures or something.)
+            </div>
+            #submit button todo
+        </div>
+    </body> 
+</html>
