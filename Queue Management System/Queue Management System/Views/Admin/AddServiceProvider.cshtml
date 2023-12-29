@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Add Service Point";
+}
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>Party!</title>
+        </head>
+    <body>
+        <div>
+            <div>
+                Enter Service Provider Info.<br />
+                <form method="post" >
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name"><br>
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email"><br>
+                    <label for="password">password:</label>
+                    <input type="text" id="password" name="password"><br>
+                    <select id="isAdmin" name="isAdmin">
+                        <option value="false">False</option>
+                        <option value="true">True</option>
+                    </select><br/>
+                    <input type="submit" value="Save Service Provider" formaction="@Url.Action("AddServiceProvider")"/>
+                </form>
+                todo input validation
+            </div>
+            
+        </div>
+    </body> 
+</html>

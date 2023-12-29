@@ -15,6 +15,7 @@ namespace Queue_Management_System.Controllers
         private readonly string connectionString;
         private readonly CustomerDbService customerdbservice;
         private readonly ServicePointService servicer;
+        private readonly ServiceProviderService serviceproviderservice;
 
         public AdminController(IConfiguration configuration)
         {
@@ -22,6 +23,7 @@ namespace Queue_Management_System.Controllers
             connectionString = _configuration.GetConnectionString("qmsdb");
             customerdbservice = new CustomerDbService(connectionString);
             servicer = new ServicePointService(connectionString);
+            serviceproviderservice = new ServiceProviderService(connectionString);
         }
 
 
@@ -99,6 +101,76 @@ namespace Queue_Management_System.Controllers
             return View(model);
         }
     
+        public async Task<IActionResult> ConfigureServiceProviders()
+        {
+            Models.ServiceProvider[] providers = await serviceproviderservice.getServiceProviders();
+            ViewData["providers"] = providers;
+            return View();
+        }
+        
+        public IActionResult AddServiceProvider()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddServiceProvider(string name, string email, string password, string isAdmin)
+        {
+            Models.ServiceProvider sp = new Models.ServiceProvider();
+            bool isadmin = Convert.ToBoolean(isAdmin);
+            
+            sp.name = name;
+            sp.email = email;
+            sp.password = password;
+            sp.isAdmin = isadmin;
+            serviceproviderservice.AddServiceProvider(sp);
+            
+            var providers = await serviceproviderservice.getServiceProviders();
+            ViewData["providers"] = providers;
+            return View("ConfigureServiceProviders");
+            
+        }
+        
+        public async Task<IActionResult> EditServiceProvider(string buttonname, string email)
+        {
+            if (buttonname == "Edit")
+            {
+                Models.ServiceProvider sp = await serviceproviderservice.getServiceProviderbyEmail(email);
+                return View(sp);
+            
+            }
+            if (buttonname == "Delete")
+            {
+                Models.ServiceProvider sp = await serviceproviderservice.getServiceProviderbyEmail(email);
+                serviceproviderservice.DeleteServiceProvider(sp);
+
+                Models.ServiceProvider[] providers = await serviceproviderservice.getServiceProviders();
+                ViewData["providers"] = providers;
+                
+                return View("ConfigureServiceProviders");
+            }
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> EditServiceProvider(string id, string name, string email, string password, string isAdmin)
+        {
+            Models.ServiceProvider sp = new Models.ServiceProvider();
+            bool isadmin = Convert.ToBoolean(isAdmin);
+            sp.id = Int32.Parse(id);
+            sp.name = name;
+            sp.email = email;
+            sp.password = password;
+            sp.isAdmin = isadmin;
+
+            serviceproviderservice.EditServiceProvider(sp);
+
+            Models.ServiceProvider[] providers = await serviceproviderservice.getServiceProviders();
+            ViewData["providers"] = providers;
+                
+            return View("ConfigureServiceProviders");
+
+        }
         public async Task<IActionResult> GenerateAnalyticalReport()
         {
             ServicePointAnalytic[] spAnalytics = await customerdbservice.getServicePointsAnalytics();

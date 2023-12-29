@@ -1,0 +1,38 @@
+@model ServiceProvider
+@{
+    ViewData["Title"] = "Add Service Point";
+}
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>Party!</title>
+        </head>
+    <body>
+        <div>
+            <div>
+                Enter Service Provider Info.<br />
+                <form method="post" >
+                    <label for="name">ID:</label>
+                    <input type="text" id="id" name="id" value=@Model.id readonly="readonly"><br>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" value=@Model.name><br>
+                    <label for="email">email:</label>
+                    <input type="text" id="email" name="email" value=@Model.email><br>
+                    <label for="password">password:</label>
+                    <input type="text" id="password" name="password" value=@Model.password><br>
+                    <label for="isAdmin">isAdmin:</label>
+                    <select id="isAdmin" name="isAdmin">
+                        <option value="false">False</option>
+                        <option value="true">True</option>
+                    </select><br/>
+
+                    <input type="submit" value="Save Service Provider Changes" formaction="@Url.Action("EditServiceProvider")"/>
+                </form>
+                todo input validation
+            </div>
+            
+        </div>
+    </body> 
+</html>
