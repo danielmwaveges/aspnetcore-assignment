@@ -1,7 +1,15 @@
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddFastReport();
+builder.Services.AddAuthentication("MyAuthScheme").AddCookie("MyAuthScheme", options => {
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/Login";
+    
+});
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -18,7 +26,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseFastReport();
 
 app.MapControllerRoute(
     name: "default",

@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>Party!</title>
+        </head>
+    <body>
+        <div>
+            <div>
+                @ViewData["message"]  #to do add red color <br/>
+                Enter Info To Login.<br />
+                <form method="post" asp-action="Login" >
+                    <label for="email">User Email:</label>
+                    <input type="text" id="email" name="email"><br>
+                    <label for="password">Password:</label>
+                    <input type="text" id="password" name="password"><br>
+                    
+                    <input type="submit" value="Submit" formaction="@Url.Action("Login")"/>
+                </form>
+                todo input validation
+            </div>
+            
+        </div>
+    </body> 
+</html>
