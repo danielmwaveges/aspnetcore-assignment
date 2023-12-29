@@ -51,8 +51,7 @@ namespace Queue_Management_System.Controllers
         [HttpPost]
         public async Task<IActionResult> CheckinPage(string service_id)
         {
-            Console.WriteLine(service_id);
-            
+           
             //generateTicketNO
             string ticketNo = Guid.NewGuid().ToString();
             customer.TicketNo = ticketNo;
@@ -62,9 +61,10 @@ namespace Queue_Management_System.Controllers
             customer.TimeQueued = TimeQueued;
             //push tcktno,timequeue,serviceid to db
             customerdbservice.addCustomerToDb(customer);
+
             //push ticketno and servicepoint id to queue
             customerQueue.Add(ticketNo, service_id);
-            //if valid service, print customer ticket, push ticketno, servicepoint and time queued to db.
+            
             //print customer ticket
             var report = new WebReport();
             //string reportPath = Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory), "Reports\\Ticket.xlsx");
@@ -87,20 +87,18 @@ namespace Queue_Management_System.Controllers
             return View();
         }
 
-        //[Authorize, 
+        
         [HttpGet]
         public async Task<IActionResult> ServicePoint(string buttonname, string serviceid)
         {
             if (buttonname == "GetNextNo")
             {
-                //Console.WriteLine(customerQueue.Key);
                 IEnumerable<string>? keys = customerQueue.Keys.Cast<string>();
                 List<string> listofkeys = keys.ToList();
                 
                 string ticketno = listofkeys.FirstOrDefault(key => String.Equals(customerQueue[key],serviceid));
                 currentTicketNo = ticketno;
-                Console.WriteLine(ticketno);
-                //string ticketno = "t009";
+                
                 if (ticketno == null)
                 {
                     ViewData["callingMessage"] = "No pending customers in queue";
@@ -131,7 +129,6 @@ namespace Queue_Management_System.Controllers
             }
 
             ServicePoint sp = await servicer.getServicePointbyID(serviceid);
-            Console.WriteLine("service id:" + serviceid);
             ViewData["servicepoint"] = sp;
 
             if (currentTicketNo == null)
@@ -190,7 +187,7 @@ namespace Queue_Management_System.Controllers
             return View(model);
         }
 
-        [HttpGet]//authorize
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> ServicePointAuthentication()
         {
@@ -207,8 +204,7 @@ namespace Queue_Management_System.Controllers
             //select password from table in db where service id == service id
             ServicePoint sp = await servicer.getServicePointbyID(service_id);
             string passkey = sp.PassKey;
-            Console.WriteLine(passkey);
-            //if correct password, return servicepoinpage viewdata(service id)
+            
             if (string.Equals(passkey,password))
             {
                 currentServicePoint = sp;

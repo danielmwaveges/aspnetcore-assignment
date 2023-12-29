@@ -177,25 +177,14 @@ namespace Queue_Management_System.Controllers
             List<ServicePointAnalytic> spAnalyticsList = new List<ServicePointAnalytic>();
             spAnalyticsList.AddRange(spAnalytics);
             
-            foreach (var analytic in spAnalytics)
-            {
-                Console.WriteLine(analytic.totalCustomers);
-            }
-
-            
             var report = new WebReport();
             report.Report.Load("Reports/ServicePointsAnalytics.frx");
             report.Report.Dictionary.RegisterData(spAnalyticsList, "spAnalytics", true);
             DataBand db1 = (DataBand)report.Report.FindObject("Data1");
-            Console.WriteLine(db1.DataSource);
+            
             db1.DataSource = report.Report.GetDataSource("spAnalytics");
-            //db1.DataSource.Enabled = true;
-            Console.WriteLine(db1.DataSource);
-           // Console.WriteLine(db1.DataSource.Enabled);
             
             report.Report.Save("Reports/ServicePointsAnalytics.frx");
-            
-
             
             ViewBag.WebReport = report;
             
