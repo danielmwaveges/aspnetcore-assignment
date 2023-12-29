@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Add Service Point";
+}
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>Party!</title>
+        </head>
+    <body>
+        <div>
+            <div>
+                Enter Service Point Info.<br />
+                <form method="post" asp-action="AddServicePoint" >
+                    <label for="servicepointid">Service Point ID:</label>
+                    <input type="text" id="servicepointid" name="servicepointid"><br>
+                    <label for="servicedescription">Service Description:</label>
+                    <input type="text" id="servicepointdescription" name="servicepointdescription"><br>
+                    <label for="passkey">Passkey:</label>
+                    <input type="text" id="passkey" name="passkey"><br>
+                    <input type="submit" value="Save Service Point" formaction="@Url.Action("AddServicePoint")"/>
+                </form>
+                todo input validation
+            </div>
+            
+        </div>
+    </body> 
+</html>
