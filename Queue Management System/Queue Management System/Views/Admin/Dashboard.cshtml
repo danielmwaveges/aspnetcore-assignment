@@ -5,37 +5,27 @@
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+        
     <body>
-        <div>
-            <div>
-                Welcome to X bank QMS dashboard login.<br />
-                configure servicepoints. #dropdown from available service points table.<br />
-                configure service providers.
+        <div class="text-center m-2">
+            <h3>Welcome to X bank QMS dashboard login.</h3><br />
+            <h4>
+            <li>
+                @Html.ActionLink("CONFIGURE SERVICE POINT", "ConfigureServicePoints", "Admin", null)
+            </li>
+            <li>
+                @Html.ActionLink("CONFIGURE SERVICE PROVIDER", "ConfigureServiceProviders", "Admin", null)
+            </li>
+            <li>
+                @Html.ActionLink("GENERATE ANALYTICAL REPORT", "GenerateAnalyticalReport", "Admin", null)
+            </li>
+            </h4>
 
-                <li>
-                    @Html.ActionLink("CONFIGURE SERVICE POINT", "ConfigureServicePoints", "Admin", null)
-                </li>
-                <li>
-                    @Html.ActionLink("CONFIGURE SERVICE PROVIDER", "ConfigureServiceProviders", "Admin", null)
-                </li>
-                <li>
-                    @Html.ActionLink("GENERATE ANALYTICAL REPORT", "GenerateAnalyticalReport", "Admin", null)
-                </li>
-                @if (ViewBag.WebReport != null)
-                {
-                    @await ViewBag.WebReport.Render()
-                }
-                
-                to do service providers
-                #button to generate an analytical report
-                </li>
-                (To do: sell it better. Add pictures or something.)
-            </div>
-            #submit button todo
+            @if (ViewBag.WebReport != null)
+            {
+                @await ViewBag.WebReport.Render()
+            }
+            
         </div>
     </body> 
 </html>

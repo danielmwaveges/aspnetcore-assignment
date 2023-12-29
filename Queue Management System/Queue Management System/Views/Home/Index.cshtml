@@ -4,29 +4,31 @@
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+        
     <body>
-        <div>
+        <div class="text-center m-2">
             <div>
-                Welcome to X bank QMS kiosk.<br />
-                What services would you like. #dropdown from service points table.<br />
-                (To do: sell it better. Add pictures or something.)
+                <h2>Welcome to X bank QMS kiosk.</h2>
+
+                <h3>What services would you like?</h3> 
             </div>
+            <h4>
             <li>
                 @Html.ActionLink("QMS CHECKIN PAGE", "CheckinPage", "Queue", null)
             </li>
+            <br/>
             <li>
                 @Html.ActionLink("QMS WAITING PAGE", "WaitingPage", "Queue", null)
             </li>
+            <br/>
             <li>
                 @Html.ActionLink("SERVICE POINTS", "ServicePointAuthentication", "Queue", null)
             </li>
+            <br/>
             <li>
                 @Html.ActionLink("ADMIN DASHBOARDS", "Dashboard", "Admin", null)
             </li>
+            </h4>
         </div>
     </body> 
 </html>

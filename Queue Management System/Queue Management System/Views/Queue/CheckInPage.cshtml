@@ -6,28 +6,25 @@
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+        
     <body>
-        <div>
-            <div>
-                Welcome to X bank QMS kiosk.<br />
-                What services would you like. #dropdown from service points table.<br />
-                <form method="post" asp-action="CheckinPage" >
-                    <label for="service">What services would you like.</label>
-                        <select name="service_id" id="service">
-                            @foreach (var item in Model.ServicePoints)
-                            {
-                                <option value=@item.ServicePointID>@item.ServiceDescription</option>
-                            }
-                        </select>
-                        <input type="submit" value="Submit">
-                </form>
-                (To do: sell it better. Add pictures or something.)
-            </div>
-            #submit button todo
+        <div class="text-center m-2">
+            <h2>Welcome to X bank QMS kiosk.</h2><br />
+            <h3>What services would you like?</h3><br />
+            
+            <form method="post" asp-action="CheckinPage" class="m-2" >
+                <label for="service" class="form-label"><h4>Please select a service</h4></label>
+
+                    <select name="service_id" id="service" class="form-select">
+                        @foreach (var item in Model.ServicePoints)
+                        {
+                            <option value=@item.ServicePointID>@item.ServiceDescription</option>
+                        }
+                    </select>
+                    <input type="submit" value="Submit" class="btn btn-primary mt-3">
+            </form>
+            
+        
         </div>
     </body> 
 </html>

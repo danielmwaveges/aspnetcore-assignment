@@ -4,31 +4,28 @@
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+       
     <body>
-        <div>
+        <div class="text-center m-2">
             <div>
+                <h3>
                 Thank you for using qms services.<br />
-                Your ticket details are shown below.<br/>
+                Your ticket details are shown below:<br/>
+                <br/>
                 Ticket No: @ViewData["TicketNo"].<br/>
                 Service Point: @ViewData["ServiceId"].<br/>
                 Time Queued: @ViewData["TimeQueued"].<br/>
-                @await ViewBag.WebReport.Render()
-                #print ticket button<br />
-                #counter queus display<br />
-                
-                (To do: sell it better. Add pictures or something.)
+                </h3>
             </div>
+            <h4>
             <li>
                 @Html.ActionLink("Back to Check-in", "CheckinPage", "Queue", null)
             </li>
             <li>
                 @Html.ActionLink("Head to Waiting Page", "WaitingPage", "Queue", null)
             </li>
-            #submit button todo
+            </h4>
+            @await ViewBag.WebReport.Render()
         </div>
     </body> 
 </html>

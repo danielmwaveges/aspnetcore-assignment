@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="12/27/2023 20:59:39" ReportInfo.Modified="12/28/2023 15:53:15" ReportInfo.CreatorVersion="2024.1.2.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="12/27/2023 20:59:39" ReportInfo.Modified="12/29/2023 18:37:19" ReportInfo.CreatorVersion="2024.1.2.0">
   <Dictionary>
     <BusinessObjectDataSource Name="Categories BusinessObject" ReferenceName="Categories BusinessObject" DataType="System.Int32" Enabled="true">
       <Column Name="Name" DataType="System.String"/>
@@ -18,23 +18,23 @@
     </BusinessObjectDataSource>
   </Dictionary>
   <ReportPage Name="Page1" Guides="670.95" Watermark.Font="Arial, 60pt">
-    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="37.8">
-      <TextObject Name="Text9" Left="226.8" Top="9.45" Width="94.5" Height="18.9" Text="SERVICE POINTS ANALYTICS" AutoWidth="true" Font="Boston Traffic, 14.25pt, style=Underline"/>
+    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="37.8" Fill.Color="LightGray">
+      <TextObject Name="Text9" Left="226.8" Top="9.45" Width="94.5" Height="28.35" Text="SERVICE POINTS ANALYTICS" AutoWidth="true" Font="Boston Traffic, 16pt, style=Underline"/>
     </ReportTitleBand>
     <PageHeaderBand Name="PageHeader1" Top="41.8" Width="718.2" Height="28.35">
-      <TextObject Name="Text1" Left="66.15" Width="122.85" Height="18.9" Text="Service Point ID" AutoWidth="true" Font="Arial, 10pt"/>
-      <TextObject Name="Text3" Left="226.8" Width="113.4" Height="18.9" Text="Description" AutoWidth="true" Font="Arial, 10pt"/>
-      <TextObject Name="Text4" Left="378" Width="103.95" Height="18.9" Text="Average Waiting Time" AutoWidth="true" Font="Arial, 10pt"/>
-      <TextObject Name="Text5" Left="529.2" Width="189" Height="18.9" Text="Average Service Time" AutoWidth="true" Font="Arial, 10pt"/>
+      <TextObject Name="Text1" Left="66.15" Top="9.45" Width="122.85" Height="18.9" Text="Service Point ID" AutoWidth="true" Font="Arial, 12pt, style=Bold, Underline"/>
+      <TextObject Name="Text3" Left="226.8" Top="9.45" Width="113.4" Height="18.9" Text="Description" AutoWidth="true" Font="Arial, 12pt, style=Bold, Underline"/>
+      <TextObject Name="Text4" Left="378" Top="9.45" Width="122.85" Height="18.9" Text="Avg Waiting Time" AutoWidth="true" Font="Arial, 12pt, style=Bold, Underline"/>
+      <TextObject Name="Text5" Left="529.2" Top="9.45" Width="141.75" Height="18.9" Text="Avg Service Time" AutoWidth="true" Font="Arial, 12pt, style=Bold, Underline"/>
     </PageHeaderBand>
     <DataBand Name="Data1" Top="74.15" Width="718.2" Height="75.6" DataSource="spAnalytics">
-      <TextObject Name="Text2" Left="66.15" Top="56.7" Width="122.85" Height="18.9" Text="[spAnalytics.servicePointID]" Font="Arial, 10pt"/>
-      <TextObject Name="Text6" Left="226.8" Top="56.7" Width="113.4" Height="18.9" Text="[spAnalytics.serviceDescription]" Font="Arial, 10pt"/>
-      <TextObject Name="Text7" Left="378" Top="56.7" Width="122.85" Height="18.9" Text="[spAnalytics.avgWaitingTime]" Font="Arial, 10pt"/>
-      <TextObject Name="Text8" Left="529.2" Top="56.7" Width="122.85" Height="18.9" Text="[spAnalytics.avgServiceTime]" Font="Arial, 10pt"/>
+      <TextObject Name="Text2" Left="66.15" Top="56.7" Width="122.85" Height="18.9" Text="[spAnalytics.servicePointID]" Font="Arial, 12pt"/>
+      <TextObject Name="Text6" Left="226.8" Top="56.7" Width="113.4" Height="18.9" Text="[spAnalytics.serviceDescription]" Font="Arial, 12pt"/>
+      <TextObject Name="Text7" Left="378" Top="56.7" Width="122.85" Height="18.9" Text="[spAnalytics.avgWaitingTime]" Font="Arial, 12pt"/>
+      <TextObject Name="Text8" Left="529.2" Top="56.7" Width="141.75" Height="18.9" Text="[spAnalytics.avgServiceTime]" Font="Arial, 12pt"/>
       <ChildBand Name="Child1" Top="153.75" Width="718.2" Height="37.8">
-        <TextObject Name="Text10" Left="75.6" Top="9.45" Width="94.5" Height="18.9" Text="CUSTOMERS SERVED:" AutoWidth="true" Font="Arial, 10pt"/>
-        <TextObject Name="Text11" Left="264.6" Top="9.45" Width="94.5" Height="18.9" Text="[spAnalytics.totalCustomers]" Font="Arial, 10pt"/>
+        <TextObject Name="Text10" Left="75.6" Top="9.45" Width="94.5" Height="18.9" Text="CUSTOMERS SERVED:" AutoWidth="true" Font="Arial, 12pt, style=Bold"/>
+        <TextObject Name="Text11" Left="264.6" Top="9.45" Width="94.5" Height="18.9" Text="[spAnalytics.totalCustomers]" Font="Arial, 12pt"/>
       </ChildBand>
     </DataBand>
     <PageFooterBand Name="PageFooter1" Top="195.55" Width="718.2" Height="18.9"/>

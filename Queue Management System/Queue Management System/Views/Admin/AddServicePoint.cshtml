@@ -4,26 +4,19 @@
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+        
     <body>
         <div>
-            <div>
-                Enter Service Point Info.<br />
-                <form method="post" asp-action="AddServicePoint" >
-                    <label for="servicepointid">Service Point ID:</label>
-                    <input type="text" id="servicepointid" name="servicepointid"><br>
-                    <label for="servicedescription">Service Description:</label>
-                    <input type="text" id="servicepointdescription" name="servicepointdescription"><br>
-                    <label for="passkey">Passkey:</label>
-                    <input type="text" id="passkey" name="passkey"><br>
-                    <input type="submit" value="Save Service Point" formaction="@Url.Action("AddServicePoint")"/>
-                </form>
-                todo input validation
-            </div>
-            
+            <h4>Enter Service Point Info.</h4><br />
+            <form method="post" class="m-2" >
+                <label for="servicepointid" class="form-label">Service Point ID:</label>
+                <input type="text" id="servicepointid" name="servicepointid"><br>
+                <label for="servicedescription" class="form-label">Service Description:</label>
+                <input type="text" id="servicepointdescription" name="servicepointdescription"><br>
+                <label for="passkey" class="form-label">Passkey:</label>
+                <input type="text" id="passkey" name="passkey"><br>
+                <input type="submit" value="Save Service Point" class="btn btn-primary mt-3" formaction="@Url.Action("AddServicePoint")"/>
+            </form>
         </div>
     </body> 
 </html>

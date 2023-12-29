@@ -1,33 +1,27 @@
 @{
-    ViewData["Title"] = "Add Service Point";
+    ViewData["Title"] = "Add Service Provider";
 }
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+        
     <body>
-        <div>
-            <div>
-                Enter Service Provider Info.<br />
-                <form method="post" >
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name"><br>
-                    <label for="email">Email:</label>
-                    <input type="text" id="email" name="email"><br>
-                    <label for="password">password:</label>
-                    <input type="text" id="password" name="password"><br>
-                    <select id="isAdmin" name="isAdmin">
-                        <option value="false">False</option>
-                        <option value="true">True</option>
-                    </select><br/>
-                    <input type="submit" value="Save Service Provider" formaction="@Url.Action("AddServiceProvider")"/>
-                </form>
-                todo input validation
-            </div>
-            
+        <div class="text-center m-2">
+            <h4>Enter Service Provider Info.</h4><br />
+            <form method="post" class="m-2" >
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" id="name" name="name"><br>
+                <label for="email" class="form-label">Email:</label>
+                <input type="text" id="email" name="email"><br>
+                <label for="password" class="form-label">password:</label>
+                <input type="text" id="password" name="password"><br>
+                <select id="isAdmin" class="form-label" name="isAdmin">
+                    <option value="false">False</option>
+                    <option value="true">True</option>
+                </select><br/>
+                <input type="submit" value="Save Service Provider" class="btn btn-primary mt-3" formaction="@Url.Action("AddServiceProvider")"/>
+            </form>
+        
         </div>
     </body> 
 </html>

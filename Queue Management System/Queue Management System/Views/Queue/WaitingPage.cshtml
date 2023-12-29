@@ -4,26 +4,19 @@
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+        
     <body>
-        <div>
-            <div>
-                Welcome to X bank QMS waiting page.<br />
-                #list of called customers<br />
+        <div class="text-center m-2">
+                <h2>Welcome to QMS waiting page.</h2><br />
+                <h4>
                 <ul>
                     @foreach (var customer in (dynamic)ViewData["queue"])
                     {
-                        <li>@customer</li>
+                        <li>@customer.Key -------------- @customer.Value</li>
                     }
                 </ul>
-                
-                #counter queus display<br />
-                (To do: sell it better. Add pictures or something.)
-            </div>
-            #submit button todo
+                </h4>
+            
         </div>
     </body> 
 </html>

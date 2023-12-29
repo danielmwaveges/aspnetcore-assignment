@@ -7,39 +7,33 @@
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+        
     <body>
-        <div>
+        <div class="text-center m-2">
             <div>
-                You are now in service point @servicepoint.ServicePointID offering @servicepoint.ServiceDescription services.<br />
-                @ViewData["callingMessage"]<br/>
+                <h3>You are now in service point @servicepoint.ServicePointID offering @servicepoint.ServiceDescription services.</h3><br />
+                <h4>@ViewData["callingMessage"]</h4><br/>
                 @if (ViewData["callednumber"] is false)
                 {
-                    <input type="button" value="Get Next Number" onclick="location.href='@Url.Action("ServicePoint", "Queue", new{buttonname = "GetNextNo", serviceid = @servicepoint.ServicePointID})'" />
+                    <input type="button" value="Get Next Number" class="btn btn-primary mt-3" onclick="location.href='@Url.Action("ServicePoint", "Queue", new{buttonname = "GetNextNo", serviceid = @servicepoint.ServicePointID})'" />
                 }
                
-                <input type="button" value="Recall Ticket No." onclick="location.href='@Url.Action("ServicePoint", "Queue", new{buttonname = "RecallTicketNo", serviceid = @servicepoint.ServicePointID})'" />
+                <input type="button" value="Recall Ticket No." class="btn btn-primary mt-3" onclick="location.href='@Url.Action("ServicePoint", "Queue", new{buttonname = "RecallTicketNo", serviceid = @servicepoint.ServicePointID})'" />
                 
                 @if ((ViewData["callednumber"] is true) && (ViewData["showedup"] is false))
                 {
-                    <input type="button" value="Mark as Showed" onclick="location.href='@Url.Action("ServicePoint", "Queue", new{buttonname = "MarkAsShowed", serviceid = @servicepoint.ServicePointID})'" />
+                    <input type="button" value="Mark as Showed" class="btn btn-primary mt-3" onclick="location.href='@Url.Action("ServicePoint", "Queue", new{buttonname = "MarkAsShowed", serviceid = @servicepoint.ServicePointID})'" />
                 }
                 
                 @if ((ViewData["callednumber"] is true) && (ViewData["showedup"] is true) && (ViewData["finished"] is false))
                 {
-                    <input type="button" value="Mark as Finished" onclick="location.href='@Url.Action("ServicePoint", "Queue", new{buttonname = "MarkAsFinished", serviceid = @servicepoint.ServicePointID})'" />
+                    <input type="button" value="Mark as Finished" class="btn btn-primary mt-3" onclick="location.href='@Url.Action("ServicePoint", "Queue", new{buttonname = "MarkAsFinished", serviceid = @servicepoint.ServicePointID})'" />
                 }
-
-                
-
                 
             </div>
             <div>
                 <form method="post" asp-action="ServicePoint" >
-                    <label for="service">Transfer to other Service Point</label>
+                    <label for="service"><h4>Transfer to other Service Point</h4></label>
                         
                         <select name="service_id" id="service">
                             <option value="dontTransfer">"Dont Transfer"</option>
@@ -49,11 +43,13 @@
                             }
                         </select>
                     
-                    <input type="submit" value="Complete Service" formaction="@Url.Action("ServicePoint")"/>
+                    <input type="submit" value="Complete Service" class="btn btn-primary mt-3" formaction="@Url.Action("ServicePoint")"/>
                 </form>
             </div>
             <div>
-                <ul>
+                <h4>Customers in Queue</h4>
+                <h5>
+                    <ul>
                     @foreach (var customer in (dynamic)ViewData["queue"])
                     {
                         @if(customer.Value == servicepoint.ServicePointID)
@@ -61,9 +57,11 @@
                             <li>@customer</li>
                         }
                     }
-                </ul>
+                    </ul>
+                </h5>
+                
             </div>
-            #submit button todo
+            
         </div>
     </body> 
 </html>

@@ -6,30 +6,23 @@
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+        
     <body>
-        <div>
-            <div>
-                @ViewData["message"]<br/> #todo add red color for message
-                Please authenticate service point to head to the service points page.<br />
-                What services would you like. #dropdown from service points table.<br />
-                <form method="post" asp-action="CheckinPage" >
-                    <label for="service">Select Service Point.</label>
-                        <select name="service_id" id="service">
-                            @foreach (var item in Model.ServicePoints)
-                            {
-                                <option value=@item.ServicePointID>@item.ServiceDescription</option>
-                            }
-                        </select>
-                        <input type="password" name="password" required/>
-                        <input type="submit" value="Submit" formaction="@Url.Action("ServicePointAuthentication")"/>
-                </form>
-                (To do: sell it better. Add pictures or something.)
-            </div>
-            #submit button todo
+        <div class="text-center m-2">
+            <font color="red">@ViewData["message"]</font><br/> 
+            <h3>Please authenticate service point to head to the service points page.</h3><br />
+            <br/>
+            <form method="post" class="m-2">
+                <label for="service" class="form-label"><h4>Select Service Point:</h4></label>
+                <select name="service_id" id="service">
+                    @foreach (var item in Model.ServicePoints)
+                    {
+                        <option value=@item.ServicePointID>@item.ServiceDescription</option>
+                    }
+                </select>
+                <input type="password" name="password" required/>
+                <input type="submit" value="Submit" class="btn btn-primary mt-3" formaction="@Url.Action("ServicePointAuthentication")"/>
+            </form>
         </div>
     </body> 
 </html>

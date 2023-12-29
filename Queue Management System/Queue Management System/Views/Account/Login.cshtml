@@ -4,26 +4,19 @@
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+        
     <body>
-        <div>
-            <div>
-                @ViewData["message"]  #to do add red color <br/>
-                Enter Info To Login.<br />
-                <form method="post" asp-action="Login" >
-                    <label for="email">User Email:</label>
-                    <input type="text" id="email" name="email"><br>
-                    <label for="password">Password:</label>
-                    <input type="text" id="password" name="password"><br>
-                    
-                    <input type="submit" value="Submit" formaction="@Url.Action("Login")"/>
-                </form>
-                todo input validation
-            </div>
-            
+        <div class="text-center m-2">
+            <font color="red">@ViewData["message"]</font><br/>
+            <h3>Enter Info To Login.</h3><br/>
+            <form method="post" asp-action="Login" class="m-2" >
+                <label for="email" class="form-label">User Email:</label>
+                <input type="text" id="email" name="email"><br>
+                <label for="password" class="form-label">Password:</label>
+                <input type="text" id="password" name="password"><br>
+                
+                <input type="submit" value="Submit" class="btn btn-primary mt-3" formaction="@Url.Action("Login")"/>
+            </form>
         </div>
     </body> 
 </html>

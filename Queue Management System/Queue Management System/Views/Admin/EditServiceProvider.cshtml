@@ -1,38 +1,30 @@
 @model ServiceProvider
 @{
-    ViewData["Title"] = "Add Service Point";
+    ViewData["Title"] = "Edit Service Provider";
 }
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
     <body>
-        <div>
-            <div>
-                Enter Service Provider Info.<br />
-                <form method="post" >
-                    <label for="name">ID:</label>
-                    <input type="text" id="id" name="id" value=@Model.id readonly="readonly"><br>
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" value=@Model.name><br>
-                    <label for="email">email:</label>
-                    <input type="text" id="email" name="email" value=@Model.email><br>
-                    <label for="password">password:</label>
-                    <input type="text" id="password" name="password" value=@Model.password><br>
-                    <label for="isAdmin">isAdmin:</label>
-                    <select id="isAdmin" name="isAdmin">
-                        <option value="false">False</option>
-                        <option value="true">True</option>
-                    </select><br/>
+        <div class="text-center m-2">
+            <H4>Enter Service Provider Info.</H4><br />
+            <form method="post" class="m-2" >
+                <label for="name" class="form-label">ID:</label>
+                <input type="text" id="id" name="id" value=@Model.id readonly="readonly"><br>
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" id="name" name="name" value=@Model.name><br>
+                <label for="email" class="form-label">email:</label>
+                <input type="text" id="email" name="email" value=@Model.email><br>
+                <label for="password" class="form-label">password:</label>
+                <input type="text" id="password" name="password" value=@Model.password><br>
+                <label for="isAdmin" class="form-label">isAdmin:</label>
+                <select id="isAdmin" class="form-label" name="isAdmin">
+                    <option value="false">False</option>
+                    <option value="true">True</option>
+                </select><br/>
 
-                    <input type="submit" value="Save Service Provider Changes" formaction="@Url.Action("EditServiceProvider")"/>
-                </form>
-                todo input validation
-            </div>
-            
+                <input type="submit" value="Save Service Provider Changes" class="btn btn-primary mt-3" formaction="@Url.Action("EditServiceProvider")"/>
+            </form>
         </div>
     </body> 
 </html>

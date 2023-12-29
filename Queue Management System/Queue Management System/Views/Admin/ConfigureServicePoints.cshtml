@@ -1,48 +1,37 @@
 @model ServicePointView
 
-
 @{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "Configure Service Points";
 }
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
     <body>
-        <div>
-            <div>
-                Welcome to X bank QMS dashboard login.<br />
-                configure servicepoints. #dropdown from available service points table.<br />
-                configure service providers.
-
-                <table class = "table table-bordered">
+        <div class="text-center m-2">
+            <h3>Welcome to QMS Service Points Configuration Page.</h3><br />
+            
+            <table class = "table table-bordered table-striped">
+                <tr>
+                    <th>Service Point ID</th>
+                    <th>Service Point Description</th>
+                    <th>Service Point PassKey</th>
+                </tr>
+                @foreach (var item in Model.ServicePoints)
+                {
                     <tr>
-                        <th>Service Point ID</th>
-                        <th>Service Point Description</th>
-                        <th>Service Point PassKey</th>
+                        <td>@item.ServicePointID</td>
+                        <td>@item.ServiceDescription</td>
+                        <td>@item.PassKey</td>
+                        <td><input type="button" value="Edit" onclick="location.href='@Url.Action("EditServicePoint", "Admin", new{buttonname = "Edit",buttonid = @item.ServicePointID})'" /></td>
+                        <td><input type="button" value="Delete" onclick="location.href='@Url.Action("EditServicePoint", "Admin", new{buttonname = "Delete",buttonid = @item.ServicePointID})'" /></td>
                     </tr>
-                    @foreach (var item in Model.ServicePoints)
-                    {
-                        <tr>
-                            <td>@item.ServicePointID</td>
-                            <td>@item.ServiceDescription</td>
-                            <td>@item.PassKey</td>
-                            <td><input type="button" value="Edit" onclick="location.href='@Url.Action("EditServicePoint", "Admin", new{buttonname = "Edit",buttonid = @item.ServicePointID})'" /></td>
-                            <td><input type="button" value="Delete" onclick="location.href='@Url.Action("EditServicePoint", "Admin", new{buttonname = "Delete",buttonid = @item.ServicePointID})'" /></td>
-                        </tr>
-                    }
-                </table>
+                }
+            </table>
 
-                <li>
-                    @Html.ActionLink("ADD SERVICE POINT", "AddServicePoint", "Admin", null)
-                </li>
-                
-                (To do: sell it better. Add pictures or something.)
-            </div>
-            #submit button todo
+            <li>
+                @Html.ActionLink("ADD SERVICE POINT", "AddServicePoint", "Admin", null)
+            </li>
+            
         </div>
     </body> 
 </html>

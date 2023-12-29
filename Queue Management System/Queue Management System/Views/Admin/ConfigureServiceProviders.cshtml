@@ -1,51 +1,42 @@
 
 @{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "Configure Service Providers";
     var providers = ViewData["providers"] as ServiceProvider[];
 }
 
 <!DOCTYPE html>
     <html>
-        <head>
-            <meta name="viewport" content="width=device-width" />
-            <title>Party!</title>
-        </head>
+       
     <body>
-        <div>
-            <div>
-                Welcome to X bank QMS dashboard login.<br />
-                configure servicepoints. #dropdown from available service points table.<br />
-                configure service providers.
+        <div class="text-center m-2">
+            <h3>Welcome to QMS Service Providers Configuration Page</h3><br />
+        
 
-                <table class = "table table-bordered">
+            <table class = "table table-bordered table-striped">
+                <tr>
+                    <th>Service Provider ID</th>
+                    <th>Service Provider Name</th>
+                    <th>Service Provider Email</th>
+                    <th>Service Provider Password</th>
+                    <th>Service Provider IsAdmin</th>
+                </tr>
+                @foreach (var item in providers)
+                {
                     <tr>
-                        <th>Service Provider ID</th>
-                        <th>Service Provider Name</th>
-                        <th>Service Provider Email</th>
-                        <th>Service Provider Password</th>
-                        <th>Service Provider IsAdmin</th>
+                        <td>@item.id</td>
+                        <td>@item.name</td>
+                        <td>@item.email</td>
+                        <td>@item.password</td>
+                        <td>@item.isAdmin</td>
+                        <td><input type="button" value="Edit" onclick="location.href='@Url.Action("EditServiceProvider", "Admin", new{buttonname = "Edit",email = @item.email})'" /></td>
+                        <td><input type="button" value="Delete" onclick="location.href='@Url.Action("EditServiceProvider", "Admin", new{buttonname = "Delete",email = @item.email})'" /></td>
                     </tr>
-                    @foreach (var item in providers)
-                    {
-                        <tr>
-                            <td>@item.id</td>
-                            <td>@item.name</td>
-                            <td>@item.email</td>
-                            <td>@item.password</td>
-                            <td>@item.isAdmin</td>
-                            <td><input type="button" value="Edit" onclick="location.href='@Url.Action("EditServiceProvider", "Admin", new{buttonname = "Edit",email = @item.email})'" /></td>
-                            <td><input type="button" value="Delete" onclick="location.href='@Url.Action("EditServiceProvider", "Admin", new{buttonname = "Delete",email = @item.email})'" /></td>
-                        </tr>
-                    }
-                </table>
+                }
+            </table>
 
-                <li>
-                    @Html.ActionLink("ADD SERVICE PROVIDER", "AddServiceProvider", "Admin", null)
-                </li>
-                
-                (To do: sell it better. Add pictures or something.)
-            </div>
-            #submit button todo
+            <li>
+                @Html.ActionLink("ADD SERVICE PROVIDER", "AddServiceProvider", "Admin", null)
+            </li>
         </div>
     </body> 
 </html>
