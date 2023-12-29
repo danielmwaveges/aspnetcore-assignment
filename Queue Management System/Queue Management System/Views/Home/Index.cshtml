@@ -1,3 +1,32 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>Party!</title>
+        </head>
+    <body>
+        <div>
+            <div>
+                Welcome to X bank QMS kiosk.<br />
+                What services would you like. #dropdown from service points table.<br />
+                (To do: sell it better. Add pictures or something.)
+            </div>
+            <li>
+                @Html.ActionLink("QMS CHECKIN PAGE", "CheckinPage", "Queue", null)
+            </li>
+            <li>
+                @Html.ActionLink("QMS WAITING PAGE", "WaitingPage", "Queue", null)
+            </li>
+            <li>
+                @Html.ActionLink("SERVICE POINTS", "ServicePointAuthentication", "Queue", null)
+            </li>
+            <li>
+                @Html.ActionLink("ADMIN DASHBOARDS", "Dashboard", "Admin", null)
+            </li>
+        </div>
+    </body> 
+</html>
