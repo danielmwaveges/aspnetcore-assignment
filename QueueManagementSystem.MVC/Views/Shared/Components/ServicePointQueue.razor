@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Components
+@using QueueManagementSystem.MVC.Models
+@using QueueManagementSystem.MVC.Services
+@namespace QueueManagementSystem.MVC.Components
+@inject NavigationManager NavigationManager
+
+@inject ITicketService TicketService
+
+
+<h1>Tickets in Queue</h1>
+@if (queuedTickets == null)
+{
+    <h4>No tickets in queue</h4>
+}
+else
+{
+    <ul>
+        @foreach (var ticket in queuedTickets)
+        {
+            <li>@ticket.TicketNumber, @ticket.ServiceName, @ticket.PrintTime, @ticket.Status</li>
+        }
+    </ul>
+}
+
+
+
+@code {
+    private List<Ticket> queuedTickets;
+    private void TicketAddedToQueue()
+    {
+       
+            //getticketqueue list for this service point
+            queuedTickets = TicketService.GetTicketsByServiceName("Dental Service");
+
+            //Tell Blazor to rewrite the DOM
+            StateHasChanged();
+        
+    }
+
+    protected override void OnInitialized()
+    {
+        TicketService.TicketAddedToQueueEvent += TicketAddedToQueue;
+    }
+
+
+}
+
+

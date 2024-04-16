@@ -1,0 +1,55 @@
+@using Microsoft.EntityFrameworkCore
+@using QueueManagementSystem.MVC.Data
+@using QueueManagementSystem.MVC.Models
+@using QueueManagementSystem.MVC.Services
+
+@namespace QueueManagementSystem.MVC.Components
+
+@*  In server-side Blazor apps, scoped service registrations can be problematic 
+    because the instance is shared across components within the user's circuit.
+    DbContext isn't thread safe and isn't designed for concurrent use.
+    If there's any chance that multiple threads may access the same code block, 
+    inject a factory and make a new instance per operation. *@
+@inject IDbContextFactory<QueueManagementSystemContext> DbFactory
+@inject ITicketService TicketService
+@inject NavigationManager NavigationManager
+
+@if (OfferedServices == null)
+{
+    <h4>Services Loading...</h4>
+}
+else
+{
+    <ul>
+        @foreach (var service in OfferedServices)
+        {
+            <li><button class="btn btn-primary" @onclick="(() => HandleServiceSelection(service.Name))">@service.Name</button></li>
+        }
+    </ul>
+}
+
+
+@code {
+    private List<Service> OfferedServices;
+
+    private void HandleServiceSelection(string serviceName)
+    {
+        //add ticket to queue
+        Ticket ticket = TicketService.GenerateTicket(serviceName);
+        Console.WriteLine(ticket.TicketNumber);
+        Console.WriteLine(ticket.ServiceName);
+
+        //print ticket
+        //reportservice.print ticket
+
+        //redirect to waiting page
+        NavigationManager.NavigateTo("/Queue/WaitingPage", true);
+
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        OfferedServices = await context.Services.ToListAsync();
+    }
+}

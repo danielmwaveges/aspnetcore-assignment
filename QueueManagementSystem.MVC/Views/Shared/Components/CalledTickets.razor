@@ -1,0 +1,63 @@
+@using QueueManagementSystem.MVC.Services
+@namespace QueueManagementSystem.MVC.Components
+
+@inject ITicketService TicketService
+
+
+<h1>Called Tickets</h1>
+
+@if (calledTicketsList.Count == 0)
+{
+    <h4>No called tickets</h4>
+}
+else
+{
+    <ul>
+        @foreach (var ticket in calledTicketsList)
+        {
+            <li>$"Ticket number {ticket.Item1} head to {ticket.Item2}"</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<(string, string)> calledTicketsList = new List<(string, string)>();
+
+    private async void TicketCalledFromQueue((string, string) e)
+    {
+        await InvokeAsync(() =>
+        {   
+            Console.WriteLine("calledtickets razor received tciket called event.");
+            calledTicketsList.Add(e);
+
+            //text to speech e.item1 ticket no , e.item2 servicepointname
+
+            //Tell Blazor to rewrite the DOM
+            StateHasChanged();
+        });
+    }
+
+    private async void TicketRemovedFromCalled(string ticketNumber)
+    {
+        await InvokeAsync(() =>
+        {
+            int index = calledTicketsList.FindIndex(ct => ct.Item1 == ticketNumber);
+            if (index >= 0)
+            {
+                calledTicketsList.RemoveAt(index);
+            }
+
+            //Tell Blazor to rewrite the DOM
+            StateHasChanged();
+        });
+    }
+
+    protected override void OnInitialized()
+    {
+        TicketService.TicketCalledFromQueueEvent += TicketCalledFromQueue;
+
+        TicketService.TicketRemovedFromCalledEvent += TicketRemovedFromCalled;
+    }
+
+    
+}
