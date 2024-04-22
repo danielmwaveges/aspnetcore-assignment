@@ -11,6 +11,8 @@ class ServiceProviderEntityTypeConfiguration : IEntityTypeConfiguration<ServiceP
     {
         builder.ToTable("ServiceProvider");
 
+        //builder.Ignore(sp => sp.ConfirmPassword);
+
         builder.Property(sp => sp.Id).ValueGeneratedOnAdd();
 
         builder.HasOne(sp => sp.ServicePoint).WithMany();

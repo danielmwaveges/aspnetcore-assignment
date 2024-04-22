@@ -12,35 +12,46 @@
     inject a factory and make a new instance per operation. *@
 @inject IDbContextFactory<QueueManagementSystemContext> DbFactory
 @inject ITicketService TicketService
+@inject IReportService ReportService
 @inject NavigationManager NavigationManager
 
-@if (OfferedServices == null)
+@if (offeredServices == null)
 {
     <h4>Services Loading...</h4>
 }
 else
 {
-    <ul>
-        @foreach (var service in OfferedServices)
+    <div class="row">
+        @foreach (var service in offeredServices)
         {
-            <li><button class="btn btn-primary" @onclick="(() => HandleServiceSelection(service.Name))">@service.Name</button></li>
+            <div class="col-sm-6" style="overflow: auto;">
+                <Card Color="CardColor.Light" TextAlignment="Alignment.Center" Class="mb-4">
+                    <CardBody>
+                        <CardTitle>@service.Name</CardTitle>
+                        <CardText>@service.Description</CardText>
+                        <div class="d-grid gap-2">
+                            <Button Color="ButtonColor.Primary" Size="Size.ExtraLarge" Outline="true" @onclick="(() => HandleServiceSelection(service.Name))"> SELECT </Button>
+                        </div>
+
+                    </CardBody>
+                </Card>
+            </div>
         }
-    </ul>
+        
+    </div>  
 }
 
 
 @code {
-    private List<Service> OfferedServices;
+    private List<Service> offeredServices;
 
     private void HandleServiceSelection(string serviceName)
     {
         //add ticket to queue
         Ticket ticket = TicketService.GenerateTicket(serviceName);
-        Console.WriteLine(ticket.TicketNumber);
-        Console.WriteLine(ticket.ServiceName);
 
         //print ticket
-        //reportservice.print ticket
+        ReportService.GenerateTicketReport(ticket);
 
         //redirect to waiting page
         NavigationManager.NavigateTo("/Queue/WaitingPage", true);
@@ -50,6 +61,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        OfferedServices = await context.Services.ToListAsync();
+        offeredServices = await context.Services.ToListAsync();
     }
 }

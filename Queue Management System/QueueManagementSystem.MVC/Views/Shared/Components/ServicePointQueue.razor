@@ -1,10 +1,17 @@
 @using Microsoft.AspNetCore.Components
 @using QueueManagementSystem.MVC.Models
 @using QueueManagementSystem.MVC.Services
-@namespace QueueManagementSystem.MVC.Components
-@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+@using QueueManagementSystem.MVC.Data
+@using System.Security.Claims
 
+
+@namespace QueueManagementSystem.MVC.Components
+
+@inject NavigationManager NavigationManager
 @inject ITicketService TicketService
+@inject IDbContextFactory<QueueManagementSystemContext> DbFactory
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 <h1>Tickets in Queue</h1>
@@ -14,31 +21,54 @@
 }
 else
 {
-    <ul>
-        @foreach (var ticket in queuedTickets)
-        {
-            <li>@ticket.TicketNumber, @ticket.ServiceName, @ticket.PrintTime, @ticket.Status</li>
-        }
-    </ul>
+    <Grid @ref="grid" TItem="Ticket" class="table table-hover table-bordered table-striped" Data="queuedTickets">
+        <GridColumn TItem="Ticket" HeaderText="Ticket Number">
+            @context.TicketNumber
+        </GridColumn>
+        <GridColumn TItem="Ticket" HeaderText="Service Name">
+            @context.ServiceName
+        </GridColumn>
+        <GridColumn TItem="Ticket" HeaderText="Print Time">
+            @context.PrintTime
+        </GridColumn>
+        <GridColumn TItem="Ticket" HeaderText="Status">
+            @context.Status
+        </GridColumn>
+        
+    </Grid>
 }
 
 
 
 @code {
-    private List<Ticket> queuedTickets;
-    private void TicketAddedToQueue()
+    private List<Ticket>? queuedTickets;
+    private string? serviceName;
+
+    private Grid<Ticket> grid;
+    private async void TicketAddedToQueue(object sender, EventArgs e)
     {
-       
+        await InvokeAsync(() =>
+        {
             //getticketqueue list for this service point
-            queuedTickets = TicketService.GetTicketsByServiceName("Dental Service");
+            queuedTickets = TicketService.GetTicketsByServiceName(serviceName);
 
             //Tell Blazor to rewrite the DOM
             StateHasChanged();
-        
+        });
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var serviceProviderId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        using var context = DbFactory.CreateDbContext();
+        var serviceProvider = await context.ServiceProviders.Include(sp => sp.ServicePoint.Service).SingleOrDefaultAsync(sp => sp.Id.ToString() == serviceProviderId);
+        serviceName = serviceProvider.ServicePoint.Service.Name;
+
+        queuedTickets = TicketService.GetTicketsByServiceName(serviceName);
+        
         TicketService.TicketAddedToQueueEvent += TicketAddedToQueue;
     }
 

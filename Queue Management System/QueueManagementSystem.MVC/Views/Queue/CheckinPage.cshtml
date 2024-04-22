@@ -6,14 +6,16 @@
 <!DOCTYPE html>
     <html>
         
-    <body>
+    <body style='background-image: url("qms.png");'>
+        
         <div class="text-center m-2">
             <h2>Welcome to QMS kiosk.</h2><br />
-            <h3>Please Select A Service You Would Like</h3><br />
+            <h3>Please Select A Service</h3><br />
             
         </div> 
-        
-        @(await Html.RenderComponentAsync<Services>(RenderMode.ServerPrerendered))
+        <div>
+            @(await Html.RenderComponentAsync<Services>(RenderMode.ServerPrerendered))
+        </div>
         
     </body> 
 </html>

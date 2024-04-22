@@ -1,0 +1,248 @@
+@using QueueManagementSystem.MVC.Models
+@using Microsoft.EntityFrameworkCore
+@using QueueManagementSystem.MVC.Data
+@using System.Text.Json
+
+
+@namespace QueueManagementSystem.MVC.Components
+
+@inject IDbContextFactory<QueueManagementSystemContext> DbFactory
+@inject ToastService ToastService
+
+<Toasts class="p-3" Messages="messages" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
+<Button Color="ButtonColor.Primary" @onclick="()=>OnShowCreateForm()">Create new service point</Button>
+
+<Modal @ref="createModal" >
+    <BodyTemplate>
+        <EditForm Model="@newServicePoint" OnValidSubmit="OnValidCreateFormSubmit" FormName="CreateServicePoint">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label class="form-label">Name: <span class="text-danger">*</span></label>
+                <InputText class="form-control" @bind-Value="newServicePoint.Name" />
+                <ValidationMessage For="@(() => newServicePoint.Name)" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Service Offered: <span class="text-danger">*</span></label>
+                <InputSelect class="form-select" @bind-Value="newServicePoint.ServiceId">
+                    @foreach (var service in services)
+                    {
+                        <option value="@service.Id">@service.Name</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => newServicePoint.ServiceId)" />
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Secondary" Class="float-end" @onclick="OnHideCreateForm">Cancel</Button>
+                    <Button Type="ButtonType.Submit" Color="ButtonColor.Success" Class="float-end me-2" >Save changes</Button>
+                </div>
+            </div>
+        </EditForm>
+    </BodyTemplate>
+    <FooterTemplate>
+        
+    </FooterTemplate>
+</Modal>
+
+<Modal @ref="editModal" Title="Edit Service">
+    <BodyTemplate>
+        <EditForm Model="@servicePoint" OnValidSubmit="OnValidEditFormSubmit" FormName="EditServicePoint">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label class="form-label">Id: </label>
+                <NumberInput TValue="int" Value="servicePoint.Id" ValueExpression="() => servicePoint.Id" Disabled/>
+                <ValidationMessage For="@(() => servicePoint.Id)" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Name: <span class="text-danger">*</span></label>
+                <InputText class="form-control" @bind-Value="servicePoint.Name" />
+                <ValidationMessage For="@(() => servicePoint.Name)" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Service Offered: <span class="text-danger">*</span></label>
+                <InputSelect class="form-select" @bind-Value="servicePoint.ServiceId">
+                    <option selected value="@servicePoint.ServiceId">@servicePoint.Service.Name</option>
+                    @foreach (var service in services.Where(s => s.Id != servicePoint.ServiceId))
+                    {
+                        <option value="@service.Id">@service.Name</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => servicePoint.ServiceId)" />
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Secondary" Class="float-end" @onclick="OnHideEditForm">Cancel</Button>
+                    <Button Type="ButtonType.Submit" Color="ButtonColor.Success" Class="float-end me-2" >Save changes</Button>
+                </div>
+            </div>
+        </EditForm>
+    </BodyTemplate>
+    <FooterTemplate>
+        
+    </FooterTemplate>
+</Modal>
+
+<ConfirmDialog @ref="deleteDialog" />
+
+@if (servicePoints == null)
+{
+    <h4>Service Points Loading...</h4>
+}
+
+else
+{
+    <Grid @ref="grid" TItem="ServicePoint" class="table table-hover table-bordered table-striped" Data="servicePoints">
+        <GridColumn TItem="ServicePoint" HeaderText="Id">
+            @context.Id
+        </GridColumn>
+        <GridColumn TItem="ServicePoint" HeaderText="Name">
+            @context.Name
+        </GridColumn>
+        <GridColumn TItem="ServicePoint" HeaderText="Service Name">
+            @context.Service.Name
+        </GridColumn>
+        <GridColumn TItem="ServicePoint">
+            <Button Color="ButtonColor.Primary" @onclick="()=>OnShowEditForm(context)">Edit</Button>
+            <Button Color="ButtonColor.Danger" @onclick="()=>OnDeleteAsync(context)">Delete</Button>
+        </GridColumn>
+    </Grid>
+}
+@code
+{
+    private List<Service>? services;
+    private List<ServicePoint> servicePoints;
+    private Modal createModal;
+    private Modal editModal;
+    private ConfirmDialog deleteDialog = default!;
+    private Grid<ServicePoint> grid;
+    private ServicePoint? servicePoint;
+    private ServicePoint? newServicePoint = new ServicePoint();
+
+    List<ToastMessage> messages = new List<ToastMessage>();
+
+    private async Task<GridDataProviderResult<ServicePoint>> ServicePointsDataProvider(GridDataProviderRequest<ServicePoint> request)
+    {
+        return await Task.FromResult(request.ApplyTo(servicePoints));
+    }
+
+    private async Task OnShowCreateForm()
+    {
+        await createModal?.ShowAsync();
+    }
+
+    private async Task OnHideCreateForm()
+    {
+        await createModal?.HideAsync();
+        newServicePoint = new ServicePoint();
+    }
+
+    private async Task OnValidCreateFormSubmit()
+    {
+        await createModal?.HideAsync();
+        try
+        {
+            using var context = DbFactory.CreateDbContext();
+            context.Add(newServicePoint);
+            context.SaveChanges();
+            servicePoints = await context.ServicePoints.Include(sp => sp.Service).OrderBy(sp => sp.Id).ToListAsync();
+            await grid.RefreshDataAsync();
+            ToastService.Notify(new ToastMessage{
+                Type = ToastType.Success, 
+                Title = $"SUCCESS", 
+                HelpText = $"{DateTime.Now}", 
+                Message = $"Service Point created successfully."
+                });
+           
+         
+        }
+        catch(Exception ex)
+        {
+            ToastService.Notify(new(ToastType.Danger, $"Error: {ex.Message}."));
+        }
+
+        newServicePoint = new ServicePoint();
+    }
+    
+    private async Task OnValidEditFormSubmit()
+    {   
+        //TODO: research double click behavior for submit button
+        
+        await editModal?.HideAsync();
+        try
+        {
+            using var context = DbFactory.CreateDbContext();
+            context.ServicePoints.Update(servicePoint);
+            context.SaveChanges();
+            servicePoints = await context.ServicePoints.Include(sp => sp.Service).OrderBy(sp => sp.Id).ToListAsync();
+            await grid.RefreshDataAsync();
+            ToastService.Notify(new ToastMessage{
+                Type = ToastType.Success, 
+                Title = $"SUCCESS", 
+                HelpText = $"{DateTime.Now}", 
+                Message = $"Service Point details edited successfully."
+                });
+         
+        }
+        catch(Exception ex)
+        {
+            ToastService.Notify(new(ToastType.Danger, $"Error: {ex.Message}."));
+        }
+        
+    }
+    
+    private async Task OnHideEditForm()
+    {   
+        await editModal?.HideAsync();
+    }
+    private async Task OnShowEditForm(ServicePoint editedServicePoint)
+    {  
+        string jsonString = JsonSerializer.Serialize(editedServicePoint);
+
+        servicePoint = JsonSerializer.Deserialize<ServicePoint>(jsonString);
+        await editModal?.ShowAsync();
+    }
+    
+    private async Task OnDeleteAsync(ServicePoint servicePoint)
+    {
+        var confirmation = await deleteDialog.ShowAsync(
+            title: "Are you sure you want to delete this?",
+            message1: "This will delete the record. Once deleted can not be rolled back.");
+    
+        if (confirmation)
+        {
+            try
+            {
+                using var context = DbFactory.CreateDbContext();
+                context.ServicePoints.Remove(servicePoint);
+                context.SaveChanges();
+                servicePoints = await context.ServicePoints.Include(sp => sp.Service).OrderBy(sp => sp.Id).ToListAsync();
+                await grid.RefreshDataAsync();
+                ToastService.Notify(new(ToastType.Success, $"Service Point deleted successfully."));
+            }
+            catch (Exception ex)
+            {
+                ToastService.Notify(new(ToastType.Danger, $"Error: {ex.Message}."));
+            }
+            
+        }
+        else
+        {
+             ToastService.Notify(new ToastMessage(ToastType.Secondary, $"Delete action canceled."));
+        }
+    
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        services = await context.Services.OrderBy(s => s.Id).ToListAsync();
+        servicePoints = await context.ServicePoints.Include(sp => sp.Service).OrderBy(sp => sp.Id).ToListAsync();
+    }
+
+}

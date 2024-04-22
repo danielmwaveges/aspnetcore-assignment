@@ -1,4 +1,5 @@
 using System;
+using System.Speech.Synthesis;
 using QueueManagementSystem.MVC.Models;
 
 namespace QueueManagementSystem.MVC.Services
@@ -7,11 +8,15 @@ namespace QueueManagementSystem.MVC.Services
     {
         Ticket GenerateTicket(string serviceName);
 
+        Ticket TransferTicket(string ticketNumber, string serviceName);
+
         Ticket? GetTicketFromQueue(string serviceName, string calledServicePointName);
+
+        Ticket? GetNoShowTicket(string serviceName, string calledServicePointName);
 
         List<Ticket> GetTicketsByServiceName(string serviceName);
 
-        void UpdateTicketStatus(Ticket ticket, string status);
+        void UpdateTicketStatus(int id, string status);
 
         void RemoveTicketFromQueue(Ticket ticket);
 
@@ -19,10 +24,10 @@ namespace QueueManagementSystem.MVC.Services
 
 
         // Declare the event.
-        public event Action TicketAddedToQueueEvent;
+        public event EventHandler TicketAddedToQueueEvent;
 
-        public event Action<(string, string)> TicketCalledFromQueueEvent;
+        public event EventHandler<(string, string)> TicketCalledFromQueueEvent;
 
-        public event Action<string> TicketRemovedFromCalledEvent;
+        public event EventHandler<string> TicketRemovedFromCalledEvent;
     }
 }

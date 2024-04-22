@@ -1,0 +1,175 @@
+@using System
+@using Microsoft.AspNetCore.Components
+@using QueueManagementSystem.MVC.Models
+@using QueueManagementSystem.MVC.Services
+@using Microsoft.EntityFrameworkCore
+@using QueueManagementSystem.MVC.Data
+@using System.Security.Claims
+
+@namespace QueueManagementSystem.MVC.Components
+
+@inject ITicketService TicketService
+@inject IDbContextFactory<QueueManagementSystemContext> DbFactory
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h3>You are now in @servicePointName offering @serviceName+s</h3>
+
+@if (state == ServiceState.Idle)
+{
+    <p>Waiting to get next ticket....</p>
+    <button class="btn btn-primary" @onclick="(() => GetNextTicket(serviceName, servicePointName))">Get Next Ticket</button>
+    <button class="btn btn-primary" @onclick="(() => RecallNextTicket(serviceName, servicePointName))">Recall Next Ticket</button>
+} 
+
+else if (state == ServiceState.Waiting)
+{
+    <p>Waiting for Ticket Number: @calledTicket.TicketNumber</p>
+    <button class="btn btn-primary" @onclick="MarkAsShowedUp">Mark as Showed Up</button>
+    <button class="btn btn-primary" @onclick="MarkAsNoShow">Mark as No Show</button>
+}
+
+else if (state == ServiceState.Serving)
+{
+    <p>Serving Ticket NUmber: @calledTicket.TicketNumber</p>
+    <button class="btn btn-primary" @onclick="MarkAsFinished">Mark as Finished</button>
+}
+
+else if (state == ServiceState.Finished)
+{
+    <p>Finished Serving Ticket Number: @calledTicket.TicketNumber</p>
+    if (OfferedServices == null)
+    {
+        <h4>Services Loading...</h4>
+    }
+    else
+    {
+        <span>Select a service to transfer:</span>
+        <select class="form-control" @bind="transferService">
+            @foreach (var service in OfferedServices)
+            {
+                <option value="@service.Name">@service.Name</option>
+            }
+        </select>
+    }
+    
+    <button class="btn btn-primary" @onclick="Transfer">Transfer Number</button>
+    <button class="btn btn-primary" @onclick="DoNotTransfer">Dont transfer</button>
+    <p>@transferService</p>
+}
+
+
+
+@code{
+    enum ServiceState
+    {
+        Idle,
+        Waiting,
+        Serving,
+        Finished,
+    }
+
+    private string? serviceName;
+    private string? servicePointName;
+    private ServiceState state = ServiceState.Idle;
+    private Ticket calledTicket = null;
+    private DateTime showUpTime;
+    private DateTime finishTime;
+    private List<Service> OfferedServices;
+    private string transferService = "";
+
+    private void GetNextTicket(string serviceName, string calledServicePointName)
+    {
+        //get ticket from ticket queue where service == ?
+        calledTicket = TicketService.GetTicketFromQueue(serviceName, calledServicePointName);
+        if (calledTicket != null)
+        {
+            state = ServiceState.Waiting;
+        }
+        else
+        {
+            //no pending ticket in queue
+            Console.WriteLine($"NO pending ticket with service name {serviceName}");
+        }
+    }
+
+    private void RecallNextTicket(string serviceName, string calledServicePoint)
+    {
+        calledTicket = TicketService.GetNoShowTicket(serviceName, calledServicePoint);
+
+        if (calledTicket != null)
+        {
+            state = ServiceState.Waiting;
+        }
+        else
+        {
+            //no pending ticket in queue
+            Console.WriteLine($"NO pending ticket with service name {serviceName}");
+        }
+    }
+    private void MarkAsShowedUp()
+    {
+        showUpTime = DateTime.Now;
+        state = ServiceState.Serving;
+        TicketService.UpdateTicketStatus(calledTicket.Id, "In-Service"); //TODO:unhardcode status
+
+    }
+
+    private void MarkAsNoShow()
+    {
+        state = ServiceState.Idle;
+        TicketService.UpdateTicketStatus(calledTicket.Id, "No-Show");
+    }
+
+    private void MarkAsFinished()
+    {
+        finishTime = DateTime.Now;
+
+        var servedTicket = new ServedTicket {
+            TicketNumber = calledTicket.TicketNumber,
+            ServiceName = calledTicket.ServiceName,
+            PrintTime = calledTicket.PrintTime,
+            ShowTime = showUpTime,
+            FinishTime = finishTime
+        };
+
+        TicketService.RemoveTicketFromQueue(calledTicket);
+
+        TicketService.SaveServedTicket(servedTicket);
+        
+        state = ServiceState.Finished;
+    }
+
+    private void Transfer()
+    {
+        
+        //add ticket to queue with different service
+        Console.WriteLine("transferrrrrrrrrrrrrrrrrrrr");
+        Console.WriteLine(transferService);
+        TicketService.TransferTicket(calledTicket.TicketNumber, transferService);
+        //print ticket
+
+        state = ServiceState.Idle;
+    }
+
+    private void DoNotTransfer()
+    {   
+        transferService = null;
+        state = ServiceState.Idle;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        OfferedServices = await context.Services.ToListAsync();
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var serviceProviderId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        var serviceProvider = await context.ServiceProviders.Include(sp => sp.ServicePoint.Service).SingleOrDefaultAsync(sp => sp.Id.ToString() == serviceProviderId);
+        servicePointName = serviceProvider.ServicePoint.Name;
+        serviceName = serviceProvider.ServicePoint.Service.Name;
+
+    }
+
+}

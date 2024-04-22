@@ -13,5 +13,32 @@ namespace Queue_Management_System.Controllers
             return View();
         }
 
+        public IActionResult ConfigureServices()
+        {
+            return View();
+        }
+
+        public IActionResult ConfigureServicePoints()
+        {
+            return View();
+        }
+
+        public IActionResult ConfigureServiceProviders()
+        {
+            return View();
+        }
+
+        public IActionResult Analytics()
+        {
+            return View();
+        }
+
+
+
     }
+
+    
+    
+
+    
 }

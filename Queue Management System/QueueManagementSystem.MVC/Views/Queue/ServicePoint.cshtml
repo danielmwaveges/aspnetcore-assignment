@@ -1,5 +1,4 @@
 @using QueueManagementSystem.MVC.Components
-@using ServicePoint = QueueManagementSystem.MVC.Components.ServicePoint
 @{
     ViewData["Title"] = "Service Point";
 }
@@ -13,7 +12,7 @@
             
         </div> 
         <div>
-            @(await Html.RenderComponentAsync<ServicePoint>(RenderMode.ServerPrerendered))
+            @(await Html.RenderComponentAsync<ServicePointOperation>(RenderMode.ServerPrerendered))
         </div>
         
         <div>

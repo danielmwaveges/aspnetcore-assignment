@@ -9,8 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddFastReport();
+builder.Services.AddBlazorBootstrap();
 
-builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddAuthentication().AddCookie("MyCookieScheme", options => {
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/Login";
+    
+});
+
+builder.Services.AddSingleton<ITicketService, TicketService>();
+builder.Services.AddSingleton<IReportService, ReportService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddDbContextFactory<QueueManagementSystemContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<QueueManagementSystemContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -42,6 +52,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -49,6 +60,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapBlazorHub();
 //app.UseEnyimMemcached();
-
+app.UseFastReport();
 
 app.Run();

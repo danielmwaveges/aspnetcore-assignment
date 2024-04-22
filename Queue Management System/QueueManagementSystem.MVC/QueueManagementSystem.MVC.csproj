@@ -8,13 +8,18 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Blazor.Bootstrap" Version="2.2.0" />
     <PackageReference Include="EnyimMemcachedCore" Version="3.2.1" />
+    <PackageReference Include="FastReport.OpenSource" Version="2024.2.0" />
+    <PackageReference Include="FastReport.OpenSource.Export.PdfSimple" Version="2024.2.0" />
+    <PackageReference Include="FastReport.OpenSource.Web" Version="2024.2.0" />
     <PackageReference Include="MemuraiDeveloper" Version="4.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.18">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
+    <PackageReference Include="System.Speech" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

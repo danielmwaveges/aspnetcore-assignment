@@ -24,7 +24,7 @@ namespace Queue_Management_System.Controllers
 
 
 
-        [HttpGet]
+        [Authorize, HttpGet]
         public IActionResult ServicePoint()
         {
             return View();

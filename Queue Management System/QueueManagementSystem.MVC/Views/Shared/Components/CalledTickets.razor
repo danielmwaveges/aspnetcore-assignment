@@ -1,4 +1,5 @@
 @using QueueManagementSystem.MVC.Services
+@using System.Speech.Synthesis
 @namespace QueueManagementSystem.MVC.Components
 
 @inject ITicketService TicketService
@@ -12,32 +13,47 @@
 }
 else
 {
-    <ul>
-        @foreach (var ticket in calledTicketsList)
-        {
-            <li>$"Ticket number {ticket.Item1} head to {ticket.Item2}"</li>
-        }
-    </ul>
+    <div class="row">
+        <div class="column">
+            @foreach (var ticket in calledTicketsList)
+            {
+                <div class="col-sm-4">
+                    <Card Color="CardColor.Danger" Class="mb-4">
+                        <CardBody>
+                            <CardTitle class="display-4">@ticket.Item1</CardTitle>
+                            <CardText class="h3">Proceed to @ticket.Item2</CardText>
+
+                        </CardBody>
+                    </Card>
+                </div>
+            }
+        </div>
+    </div>
+    
 }
+
 
 @code {
     private List<(string, string)> calledTicketsList = new List<(string, string)>();
 
-    private async void TicketCalledFromQueue((string, string) e)
+    private (string?, string?) latestCalledTicket;
+    private async void TicketCalledFromQueue(object sender, (string, string) e)
     {
         await InvokeAsync(() =>
         {   
-            Console.WriteLine("calledtickets razor received tciket called event.");
+            
             calledTicketsList.Add(e);
-
-            //text to speech e.item1 ticket no , e.item2 servicepointname
+            latestCalledTicket = e;
+            SpeechSynthesizer synth = new SpeechSynthesizer();
+            synth.SetOutputToDefaultAudioDevice();
+            var prompt = synth.SpeakAsync($"Ticket Number {e.Item1}, please proceed to {e.Item2} ");
 
             //Tell Blazor to rewrite the DOM
             StateHasChanged();
         });
     }
 
-    private async void TicketRemovedFromCalled(string ticketNumber)
+    private async void TicketRemovedFromCalled(object sender, string ticketNumber)
     {
         await InvokeAsync(() =>
         {
@@ -45,6 +61,11 @@ else
             if (index >= 0)
             {
                 calledTicketsList.RemoveAt(index);
+            }
+
+            if (latestCalledTicket.Item1 == ticketNumber)
+            {
+                latestCalledTicket = (null, null);
             }
 
             //Tell Blazor to rewrite the DOM
