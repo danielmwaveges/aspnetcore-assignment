@@ -1,5 +1,5 @@
 
-# QUEUE MANAGEMENT SYSTEM (Work in Progress)
+# QUEUE MANAGEMENT SYSTEM
 
 A C# ASP.Net project intended to efficiently manage queues for various service oriented premises.
 
