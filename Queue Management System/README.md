@@ -8,13 +8,14 @@ A C# ASP.Net project intended to efficiently manage queues for various service o
 ## Features
 
 - Incorporate server side Blazor rendering for a smoother and interactive user experience.
-- Real-time updates of queues and ticket status to waiting customers and service providers. (work in progress)
-- Text to speech implementation of called customers (work in progress)
+- Real-time updates of queues and ticket status to waiting customers and service providers. (Done)
+- Text to speech implementation of called customers (Done)
 - Uses EFCore for a code first database modelling and migrations.
 - Provides database context seed data for ease of testing and development.
-- Reporting of served customers statistics using FastReport.Net (work in progress)
-- Tailwind css for styling. (Intended)
-- Uses Bcrypt algorithm for passwords hashing
+- Reporting of served customers statistics using FastReport.Net (Done)
+- BlazorBootstrap components for UI and styling. (Done)
+- Uses Bcrypt algorithm for passwords hashing.
+- Uses Humanizer package for readable date and time types.
 
 
 
