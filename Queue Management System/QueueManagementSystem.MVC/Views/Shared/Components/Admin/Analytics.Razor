@@ -1,0 +1,124 @@
+@using System.Linq
+@using QueueManagementSystem.MVC.Models
+@using QueueManagementSystem.MVC.Services
+@using Humanizer
+@using FastReport
+@using FastReport.Export.PdfSimple
+
+@namespace QueueManagementSystem.MVC.Components
+
+@inject IAnalyticsService AnalyticsService
+@inject IReportService ReportService
+@inject IJSRuntime JS
+
+<h4 class="display-4 text-center">Service Analytics Dashboard</h4>
+
+<h5 class="display-6 text-center">Overview</h5>
+
+<Button Color="ButtonColor.Primary" Size="Size.Large" Outline="true" @onclick="DownloadAnalyticReport"> Print Service Analytics </Button>
+@if (totalServedTickets > 0)
+{
+    <div class="row mx-auto">
+        <div class="col-sm-4">
+            <Card Color="CardColor.Light" TextAlignment="Alignment.Center" Class="mb-4">
+                <CardBody>
+                    <CardTitle>Total Served Tickets</CardTitle>
+                    <CardText>@totalServedTickets</CardText>
+                </CardBody>
+            </Card>
+        </div>
+
+        <div class="col-sm-4">
+            <Card Color="CardColor.Light" TextAlignment="Alignment.Center" Class="mb-4">
+                <CardBody>
+                    <CardTitle>Most Offered Service</CardTitle>
+                    <CardText>@($"{mostOfferedService.Name} {@mostOfferedServicePercentage}%")</CardText>
+                </CardBody>
+            </Card>
+        </div>
+
+        <div class="col-sm-4">
+            <Card Color="CardColor.Light" TextAlignment="Alignment.Center" Class="mb-4">
+                <CardBody>
+                    <CardTitle>Least Offered Service</CardTitle>
+                    <CardText>@($"{leastOfferedService.Name} {@leastOfferedServicePercentage}%")</CardText>
+                </CardBody>
+            </Card>
+        </div>
+    </div>
+
+    <div>
+        <h5 class="display-6 text-center">Service Statistics</h5>
+    </div>
+
+    <Grid @ref="statsGrid" TItem="ServiceStat" class="table table-hover table-bordered table-striped" Data="serviceStats">
+        <GridColumn TItem="ServiceStat" HeaderText="Service Name">
+            @context.Name
+        </GridColumn>
+        <GridColumn TItem="ServiceStat" HeaderText="Total Times Offered">
+            @context.TotalOfferings
+        </GridColumn>
+        <GridColumn TItem="ServiceStat" HeaderText="Average Waiting Time">
+            @context.AverageWaitingTime.Humanize()
+        </GridColumn>
+        <GridColumn TItem="ServiceStat" HeaderText="Average Service Time">
+            @context.AverageServiceTime.Humanize()
+        </GridColumn>
+
+    </Grid>
+
+    
+}
+
+<script>
+    downloadFileFromStream = async (fileName, contentStreamReference) => {
+        const arrayBuffer = await contentStreamReference.arrayBuffer();
+        const blob = new Blob([arrayBuffer]);
+        const url = URL.createObjectURL(blob);
+        const anchorElement = document.createElement('a');
+        anchorElement.href = url;
+        anchorElement.download = fileName ?? '';
+        anchorElement.click();
+        anchorElement.remove();
+        URL.revokeObjectURL(url);
+    };
+</script>
+
+@code{
+    private ServiceStat? mostOfferedService;
+    private int? mostOfferedServicePercentage;
+    private ServiceStat? leastOfferedService;
+    private int? leastOfferedServicePercentage;
+    private int totalServedTickets;
+    private List<ServiceStat>? serviceStats;
+    private DateTime? serviceDate;
+    private DateTime? serviceStartDate;
+    private DateTime? serviceEndDate;
+    private Grid<ServiceStat> statsGrid;
+
+    private async Task DownloadAnalyticReport()
+    {
+        Report report =  ReportService.GenerateAnalyticalReport(serviceStats);
+        using (MemoryStream strm = new MemoryStream())
+        {
+            PDFSimpleExport pdfExport = new PDFSimpleExport();
+            pdfExport.Export(report, strm);
+            strm.Position = 0;
+            var fileName = "AnalyticalReport.pdf";
+
+            using var streamRef = new DotNetStreamReference(strm);
+            await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        serviceStats = await AnalyticsService.GetServicesStatsAsync();
+        totalServedTickets = serviceStats.Sum(ss => ss.TotalOfferings);
+        mostOfferedService = serviceStats.MaxBy(ss => ss.TotalOfferings);
+        leastOfferedService = serviceStats.MinBy(ss => ss.TotalOfferings);
+        mostOfferedServicePercentage = 100 * mostOfferedService.TotalOfferings / totalServedTickets;
+        leastOfferedServicePercentage = 100 * leastOfferedService.TotalOfferings / totalServedTickets;
+    }
+}

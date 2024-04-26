@@ -1,7 +1,5 @@
 using QueueManagementSystem.MVC.Models;
 using FastReport;
-using FastReport.Export.PdfSimple;
-using Microsoft.AspNetCore.Hosting;
 
 namespace QueueManagementSystem.MVC.Services
 {
@@ -22,14 +20,23 @@ namespace QueueManagementSystem.MVC.Services
             report.SetParameterValue("TicketNo", ticket.TicketNumber);
             report.SetParameterValue("serviceID", ticket.ServiceName);
             report.SetParameterValue("printTime", ticket.PrintTime);
-
+            
             report.Prepare();
 
-            PDFSimpleExport pdfExport = new PDFSimpleExport();
-            pdfExport.Export(report, "TicketReport.pdf");
+            return report;
+        }
+
+        public Report GenerateAnalyticalReport(List<ServiceStat> serviceStats)
+        {
+            Report report = new Report();
+            string reportPath = Path.Combine(_hostingEnvironment.WebRootPath, "reports", "ServiceStats.frx");
+            report.Load(reportPath);
+            report.Dictionary.RegisterData(serviceStats, "serviceStats", true);
+            DataBand db1 = (DataBand)report.FindObject("Data1");
+            db1.DataSource = report.GetDataSource("serviceStats");
+            report.Prepare();
 
             return report;
-
         }
     }
 }

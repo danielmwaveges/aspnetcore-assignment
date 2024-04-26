@@ -15,12 +15,12 @@ builder.Services.AddBlazorBootstrap();
 builder.Services.AddAuthentication().AddCookie("MyCookieScheme", options => {
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/Login";
-    
 });
 
 builder.Services.AddSingleton<ITicketService, TicketService>();
 builder.Services.AddSingleton<IReportService, ReportService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 builder.Services.AddDbContextFactory<QueueManagementSystemContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<QueueManagementSystemContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -45,6 +45,7 @@ using (var scope = app.Services.CreateScope())
     QueueManagementSystemContextSeeder.SeedServices(context);
     QueueManagementSystemContextSeeder.SeedServicePoints(context);
     QueueManagementSystemContextSeeder.SeedServiceProviders(context);
+    QueueManagementSystemContextSeeder.ResetQueue(context);
 }
 
 app.UseHttpsRedirection();
@@ -59,7 +60,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapBlazorHub();
-//app.UseEnyimMemcached();
+
 app.UseFastReport();
 
 app.Run();

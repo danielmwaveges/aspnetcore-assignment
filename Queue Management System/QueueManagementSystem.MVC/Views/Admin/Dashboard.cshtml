@@ -2,33 +2,26 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<!DOCTYPE html>
-    <html>
-        
-    <body>
-        <div class="text-center m-2">
-            <div>
-                <h2>Welcome to QMS Admin Dashboard.</h2>
- 
-            </div>
-            <h4>
-            <li>
-                @Html.ActionLink("Configure Services", "ConfigureServices", "Admin", null)
-            </li>
 
-            <li>
-                @Html.ActionLink("Configure Service Providers", "ConfigureServiceProviders", "Admin", null)
-            </li>
+<div class="text-center ">
+    <div>
+        <h2 class="display-4">Welcome to QMS Admin Dashboard.</h2>
 
-            <li>
-                @Html.ActionLink("Configure Service Points", "ConfigureServicePoints", "Admin", null)
-            </li>
-
-            <li>
-                @Html.ActionLink("Generate Analytical Report", "Analytics", "Admin", null)
-            </li>
-        </div>
-
-    </body>
-
-</html>
+    </div>
+    <hr>
+    <div>
+        @Html.ActionLink("Configure Services", "ConfigureServices", "Admin", null, new { @class = "btn btn-primary" })
+    </div>
+    <hr>
+    <div>
+        @Html.ActionLink("Configure Service Providers", "ConfigureServiceProviders", "Admin", null, new { @class = "btn btn-primary" })
+    </div>
+    <hr>
+    <div>
+        @Html.ActionLink("Configure Service Points", "ConfigureServicePoints", "Admin", null, new { @class = "btn btn-primary" })
+    </div>
+    <hr>
+    <div>
+        @Html.ActionLink("Analytical Reports", "Analytics", "Admin", null, new { @class = "btn btn-primary" })
+    </div>
+</div>

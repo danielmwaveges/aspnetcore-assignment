@@ -176,6 +176,7 @@ else
     private async Task OnValidCreateFormSubmit()
     {
         await createModal?.HideAsync();
+
         try
         {
             using var context = DbFactory.CreateDbContext();
@@ -189,9 +190,7 @@ else
                 Title = $"SUCCESS", 
                 HelpText = $"{DateTime.Now}", 
                 Message = $"Service Provider created successfully."
-                });
-            
-         
+                }); 
         }
         catch(Exception ex)
         {
@@ -205,6 +204,7 @@ else
     private async Task OnValidEditFormSubmit()
     {   
         await editModal?.HideAsync();
+
         try
         {
             using var context = DbFactory.CreateDbContext();
@@ -227,6 +227,7 @@ else
         }
         
     }
+
     private async Task OnShowEditForm(ServiceProvider editedServiceProvider)
     {  
         string jsonString = JsonSerializer.Serialize(editedServiceProvider);
@@ -268,8 +269,8 @@ else
         {
              ToastService.Notify(new ToastMessage(ToastType.Secondary, $"Delete action canceled."));
         }
-    
     }
+
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();

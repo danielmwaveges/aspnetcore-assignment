@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using QueueManagementSystem.MVC.Models;
-//using Enyim.Caching;
-//using Enyim.Caching.Memcached;
 
 namespace QueueManagementSystem.MVC.Controllers;
 

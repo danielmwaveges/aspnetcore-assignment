@@ -65,5 +65,16 @@ namespace QueueManagementSystem.MVC.Data
 
             }
         }
+
+        public static void ResetQueue(QueueManagementSystemContext context)
+        {
+            var queuedTickets = context.QueuedTickets;
+            foreach (var ticket in queuedTickets)
+            {
+                ticket.Status = "In-Queue"; //TODO: Unhardcode this string
+            }
+            context.UpdateRange(queuedTickets);
+            context.SaveChanges();
+        }
     }
 }

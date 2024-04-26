@@ -7,7 +7,7 @@ A C# ASP.Net project intended to efficiently manage queues for various service o
 
 ## Features
 
-- Incorporate server side Blazor rendering for a       smoother user experience.
+- Incorporate server side Blazor rendering for a smoother and interactive user experience.
 - Real-time updates of queues and ticket status to waiting customers and service providers. (work in progress)
 - Text to speech implementation of called customers (work in progress)
 - Uses EFCore for a code first database modelling and migrations.

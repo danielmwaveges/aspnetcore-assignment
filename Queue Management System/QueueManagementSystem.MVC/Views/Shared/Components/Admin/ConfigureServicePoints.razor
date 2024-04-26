@@ -146,6 +146,7 @@ else
     private async Task OnValidCreateFormSubmit()
     {
         await createModal?.HideAsync();
+        
         try
         {
             using var context = DbFactory.CreateDbContext();
@@ -159,8 +160,6 @@ else
                 HelpText = $"{DateTime.Now}", 
                 Message = $"Service Point created successfully."
                 });
-           
-         
         }
         catch(Exception ex)
         {
@@ -201,6 +200,7 @@ else
     {   
         await editModal?.HideAsync();
     }
+
     private async Task OnShowEditForm(ServicePoint editedServicePoint)
     {  
         string jsonString = JsonSerializer.Serialize(editedServicePoint);
@@ -236,8 +236,8 @@ else
         {
              ToastService.Notify(new ToastMessage(ToastType.Secondary, $"Delete action canceled."));
         }
-    
     }
+
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();

@@ -1,7 +1,7 @@
 @using QueueManagementSystem.MVC.Components
 
 @{
-    ViewData["Title"] = "Configure Services";
+    ViewData["Title"] = "Analytics";
 }
 
 <!DOCTYPE html>
@@ -9,9 +9,13 @@
         
     <body>
         <div class="text-center m-2">
-            <h2>Welcome to QMS kiosk Service Configuration Page</h2><br />
+            <h2>Welcome to QMS kiosk Service Analytics Page</h2><br />
             
         </div> 
+
+        <div >
+            @(await Html.RenderComponentAsync<Analytics>(RenderMode.ServerPrerendered))
+        </div>
         
     </body> 
 </html>

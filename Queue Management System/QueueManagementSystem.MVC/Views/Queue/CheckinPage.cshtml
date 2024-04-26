@@ -3,20 +3,12 @@
     ViewData["Title"] = "Check-In";
 }
 
-<!DOCTYPE html>
-    <html>
+<div class="text-center m-2">
+    <h2 class="display-4">Welcome to QMS kiosk.</h2><br />
+    <h3>Please Select A Service</h3><br />
+    
+</div> 
+<div >
+    @(await Html.RenderComponentAsync<Services>(RenderMode.ServerPrerendered))
+</div>
         
-    <body style='background-image: url("qms.png");'>
-        
-        <div class="text-center m-2">
-            <h2>Welcome to QMS kiosk.</h2><br />
-            <h3>Please Select A Service</h3><br />
-            
-        </div> 
-        <div>
-            @(await Html.RenderComponentAsync<Services>(RenderMode.ServerPrerendered))
-        </div>
-        
-    </body> 
-</html>
-

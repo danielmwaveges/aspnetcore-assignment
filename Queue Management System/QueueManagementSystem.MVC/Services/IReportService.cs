@@ -7,5 +7,7 @@ namespace QueueManagementSystem.MVC.Services
     {
         Report GenerateTicketReport(Ticket ticket);
 
+        Report GenerateAnalyticalReport(List<ServiceStat> serviceStats);
+
     }
 }

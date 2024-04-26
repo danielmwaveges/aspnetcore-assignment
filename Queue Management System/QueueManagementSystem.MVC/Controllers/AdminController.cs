@@ -3,10 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Queue_Management_System.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-
         [HttpGet]
         public IActionResult Dashboard()
         {
@@ -32,13 +31,5 @@ namespace Queue_Management_System.Controllers
         {
             return View();
         }
-
-
-
-    }
-
-    
-    
-
-    
+    }   
 }

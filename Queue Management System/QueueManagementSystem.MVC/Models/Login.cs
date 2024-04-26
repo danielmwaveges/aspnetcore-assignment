@@ -8,7 +8,7 @@ namespace QueueManagementSystem.MVC.Models
         [EmailAddress(ErrorMessage = "Enter a valid email address")]
         public string Email {get; set;}
 
-        [Required(ErrorMessage = "Please enter password")]
+        [Required(ErrorMessage = "Please enter a password")]
         public string Password {get; set;}
     }
     

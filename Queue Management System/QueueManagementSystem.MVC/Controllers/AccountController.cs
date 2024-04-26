@@ -15,6 +15,7 @@ namespace Queue_Management_System.Controllers
         {
             _authService = authService;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -22,7 +23,7 @@ namespace Queue_Management_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel user, string returnUrl)
+        public async Task<IActionResult> Login(LoginModel user, string returnUrl=null)
         {
             if (!ModelState.IsValid)
             {
@@ -30,8 +31,6 @@ namespace Queue_Management_System.Controllers
             }
 
             var serviceProvider = await _authService.Authenticate(user);
-            
-
             if (serviceProvider == null)
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt");
@@ -58,10 +57,19 @@ namespace Queue_Management_System.Controllers
 
             await HttpContext.SignInAsync("MyCookieScheme", new ClaimsPrincipal(claimsIdentity), authProperties);
 
-            return LocalRedirect(returnUrl);       
+            if (returnUrl != null)
+            {
+               return LocalRedirect(returnUrl); 
+            }
+            else return RedirectToAction("Index", "Home");
+                   
         }
 
-        //TODO: logout
-
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("MyCookieScheme");
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

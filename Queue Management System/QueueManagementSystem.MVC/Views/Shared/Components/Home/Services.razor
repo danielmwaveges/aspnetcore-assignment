@@ -2,6 +2,9 @@
 @using QueueManagementSystem.MVC.Data
 @using QueueManagementSystem.MVC.Models
 @using QueueManagementSystem.MVC.Services
+@using FastReport
+@using FastReport.Export.PdfSimple;
+
 
 @namespace QueueManagementSystem.MVC.Components
 
@@ -14,10 +17,11 @@
 @inject ITicketService TicketService
 @inject IReportService ReportService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 @if (offeredServices == null)
 {
-    <h4>Services Loading...</h4>
+    <h4 class="display-4">Services Loading...</h4>
 }
 else
 {
@@ -41,21 +45,47 @@ else
     </div>  
 }
 
+<script>
+    downloadFileFromStream = async (fileName, contentStreamReference) => {
+        const arrayBuffer = await contentStreamReference.arrayBuffer();
+        const blob = new Blob([arrayBuffer]);
+        const url = URL.createObjectURL(blob);
+        const anchorElement = document.createElement('a');
+        anchorElement.href = url;
+        anchorElement.download = fileName ?? '';
+        anchorElement.click();
+        anchorElement.remove();
+        URL.revokeObjectURL(url);
+    };
+</script>
 
 @code {
     private List<Service> offeredServices;
 
-    private void HandleServiceSelection(string serviceName)
+    private async Task PrintTicket(Ticket ticket)
     {
-        //add ticket to queue
+        Report report = ReportService.GenerateTicketReport(ticket);
+        using (MemoryStream strm = new MemoryStream())
+        {
+            PDFSimpleExport pdfExport = new PDFSimpleExport();
+            pdfExport.Export(report, strm);
+            strm.Position = 0;
+            var fileName = $"{ticket.TicketNumber}.pdf";
+
+            using var streamRef = new DotNetStreamReference(strm);
+            await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+        }
+    }
+    private async Task HandleServiceSelection(string serviceName)
+    {
+        //generate and add ticket to queue
         Ticket ticket = TicketService.GenerateTicket(serviceName);
 
         //print ticket
-        ReportService.GenerateTicketReport(ticket);
-
+        await PrintTicket(ticket);
+        
         //redirect to waiting page
         NavigationManager.NavigateTo("/Queue/WaitingPage", true);
-
     }
     
     protected override async Task OnInitializedAsync()

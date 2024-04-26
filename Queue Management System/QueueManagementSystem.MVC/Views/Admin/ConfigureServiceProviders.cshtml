@@ -11,7 +11,9 @@
             <h2>Welcome to QMS kiosk Service Configuration Page</h2><br />
             
         </div> 
-        
+        <div >
+            @(await Html.RenderComponentAsync<ConfigureServiceProviders>(RenderMode.ServerPrerendered))
+        </div>
     </body> 
 </html>
 

@@ -5,7 +5,6 @@
 @using QueueManagementSystem.MVC.Data
 @using System.Security.Claims
 
-
 @namespace QueueManagementSystem.MVC.Components
 
 @inject NavigationManager NavigationManager
@@ -13,8 +12,8 @@
 @inject IDbContextFactory<QueueManagementSystemContext> DbFactory
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-
-<h1>Tickets in Queue</h1>
+<hr>
+<h5 class="display-6 text-center">Tickets in Queue</h5>
 @if (queuedTickets == null)
 {
     <h4>No tickets in queue</h4>
@@ -38,18 +37,15 @@ else
     </Grid>
 }
 
-
-
 @code {
     private List<Ticket>? queuedTickets;
     private string? serviceName;
-
     private Grid<Ticket> grid;
-    private async void TicketAddedToQueue(object sender, EventArgs e)
+
+    private async void OnTicketQueueAltered(object sender, EventArgs e)
     {
         await InvokeAsync(() =>
         {
-            //getticketqueue list for this service point
             queuedTickets = TicketService.GetTicketsByServiceName(serviceName);
 
             //Tell Blazor to rewrite the DOM
@@ -61,7 +57,7 @@ else
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        var serviceProviderId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var serviceProviderId = user.FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
 
         using var context = DbFactory.CreateDbContext();
         var serviceProvider = await context.ServiceProviders.Include(sp => sp.ServicePoint.Service).SingleOrDefaultAsync(sp => sp.Id.ToString() == serviceProviderId);
@@ -69,7 +65,7 @@ else
 
         queuedTickets = TicketService.GetTicketsByServiceName(serviceName);
         
-        TicketService.TicketAddedToQueueEvent += TicketAddedToQueue;
+        TicketService.TicketQueueAlteredEvent += OnTicketQueueAltered;
     }
 
 

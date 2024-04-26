@@ -26,14 +26,21 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Queue" asp-action="ServicePoint">Service Point</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Dashboard">Admin Dashboard</a>
+                        </li>
                     </ul>
+                    @await Html.PartialAsync("_UserActions.cshtml")
                 </div>
             </div>
         </nav>
     </header>
     
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container" >
+        <main role="main" class="pb-3" style='height: 100%; background-image: url("https://images.pexels.com/photos/2341290/pexels-photo-2341290.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"); background-size: 100% 100%;'>
             
             @RenderBody()
         </main>

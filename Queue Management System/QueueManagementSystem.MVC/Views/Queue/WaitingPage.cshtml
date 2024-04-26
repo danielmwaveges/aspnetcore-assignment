@@ -3,17 +3,11 @@
     ViewData["Title"] = "Waiting Page";
 }
 
-<!DOCTYPE html>
-    <html>
-        
-    <body>
-        <div class="text-center m-2">
-            <h2>Welcome to QMS kiosk waiting room</h2><br />
-            
-        </div> 
-        
-        @(await Html.RenderComponentAsync<CalledTickets>(RenderMode.ServerPrerendered))
-        
-    </body> 
-</html>
 
+<div class="text-center m-2">
+    <h2 class="display-4">Welcome to QMS kiosk waiting room</h2>
+    
+</div> 
+<div>
+    @(await Html.RenderComponentAsync<CalledTickets>(RenderMode.ServerPrerendered))
+</div> 

@@ -24,7 +24,7 @@ namespace QueueManagementSystem.MVC.Services
 
 
         // Declare the event.
-        public event EventHandler TicketAddedToQueueEvent;
+        public event EventHandler TicketQueueAlteredEvent;
 
         public event EventHandler<(string, string)> TicketCalledFromQueueEvent;
 

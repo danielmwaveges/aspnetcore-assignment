@@ -12,6 +12,9 @@
             
         </div> 
         
+        <div >
+            @(await Html.RenderComponentAsync<ConfigureServices>(RenderMode.ServerPrerendered))
+        </div>
     </body> 
 </html>
 

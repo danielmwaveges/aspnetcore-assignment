@@ -3,22 +3,16 @@
     ViewData["Title"] = "Service Point";
 }
 
-<!DOCTYPE html>
-    <html>
-        
-    <body>
-        <div class="text-center m-2">
-            <h2>Welcome to QMS kiosk service point</h2><br />
-            
-        </div> 
-        <div>
-            @(await Html.RenderComponentAsync<ServicePointOperation>(RenderMode.ServerPrerendered))
-        </div>
-        
-        <div>
-            @(await Html.RenderComponentAsync<ServicePointQueue>(RenderMode.ServerPrerendered))
-        </div>
-        
-    </body> 
-</html>
 
+<div class="text-center m-2">
+    <h2 class="display-4">Welcome to QMS kiosk service point</h2>
+    
+</div> 
+<div>
+    @(await Html.RenderComponentAsync<ServicePointOperation>(RenderMode.ServerPrerendered))
+</div>
+
+<div>
+    @(await Html.RenderComponentAsync<ServicePointQueue>(RenderMode.ServerPrerendered))
+</div>
+  

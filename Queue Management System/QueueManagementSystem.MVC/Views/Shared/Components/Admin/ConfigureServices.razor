@@ -108,7 +108,6 @@ else
 @code{
     private List<Service>? services;
     private Modal editModal;
-
     private Modal createModal;
     private ConfirmDialog deleteDialog = default!;
     private Service? service;
@@ -129,6 +128,7 @@ else
     private async Task OnValidCreateFormSubmit()
     {
         await createModal?.HideAsync();
+
         try
         {
             using var context = DbFactory.CreateDbContext();
@@ -142,7 +142,6 @@ else
                 HelpText = $"{DateTime.Now}", 
                 Message = $"Service details added successfully."
                 });
-         
         }
         catch(Exception ex)
         {
@@ -157,6 +156,7 @@ else
         //TODO: research double click behavior for submit button
         
         await editModal?.HideAsync();
+
         try
         {
             using var context = DbFactory.CreateDbContext();
@@ -169,13 +169,12 @@ else
                 HelpText = $"{DateTime.Now}", 
                 Message = $"Service detail edited successfully."
                 });
-         
         }
         catch(Exception ex)
         {
             ToastService.Notify(new(ToastType.Danger, $"Error: {ex.Message}."));
         }
-        
+      
     }
 
     private async Task OnShowEditForm(Service editedService)
@@ -212,7 +211,6 @@ else
         {
              ToastService.Notify(new ToastMessage(ToastType.Secondary, $"Delete action canceled."));
         }
-    
     }
 
     private async Task OnHideEditForm()

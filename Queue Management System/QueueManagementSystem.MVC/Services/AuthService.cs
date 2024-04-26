@@ -14,13 +14,10 @@ namespace QueueManagementSystem.MVC.Services
             _context = context;
         }
 
-        public async Task<Models.ServiceProvider>? Authenticate(LoginModel user)
+        public async Task<Models.ServiceProvider?> Authenticate(LoginModel user)
         {
             Models.ServiceProvider? provider = await _context.ServiceProviders.SingleOrDefaultAsync(sp => sp.Email == user.Email);
             
-            Console.WriteLine(provider.Email);
-            Console.WriteLine(provider.Password);
-            Console.WriteLine(BCrypt.Net.BCrypt.Verify(user.Password, provider.Password));
             if (provider == null || !BCrypt.Net.BCrypt.Verify(user.Password, provider.Password))
             {
                 return null;
